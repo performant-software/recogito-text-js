@@ -20,16 +20,16 @@ The plan is to organize the project into a number of sub-modules.
 
 To run the project in development mode:
 
-- Enter the `recogito-annotation-editor` folder
-- Run `npm install` to install dependencies
+- Enter the `recogito-text-highlights` folder and run `npm install` to install dependencies
+- Enter the `recogito-annotation-editor` folder and run `npm install`
 - Run `npm start` and go to [localhost:3000](http://localhost:3000)
 
-Run `npm run build` to build the minified bundle.
+To build the minified bundle, run `npm run build`.
 
 ## Using RecogitoJS
 
 At the moment, __RecogitoJS__ works only on plaintext content,
-contained in a single `<pre>` tag. Usage instructions coming soon.
+contained in a single `<pre>` tag. Usage instructions: coming soon.
 
 ### Annotation Format
 
