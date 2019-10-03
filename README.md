@@ -7,8 +7,6 @@ applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/)
 
 ![Screenshot](screenshot.png)
 
-<p style="text-align:center; font-weight:bold; font-size:19px; color:orange;">!!! WARNING - WORK IN PROGRESS !!!</p>
-
 __This project is just getting started. To make it happen, we need your help. Get in touch if you want to contribute.__
 
 ## Developer Information
