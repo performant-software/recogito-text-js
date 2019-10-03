@@ -3,7 +3,7 @@
 __RecogitoJS__ is an experiment to extract the annotation functionality
 of [Recogito](https://recogito.pelagios.org) into an independent, client-only JavaScript library. With __RecogitoJS__, we want to bring Recogito-like 
 annotation to any website, and enable everyone to build customized annotation
-applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/).
+applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/index.html).
 
 ![Screenshot](screenshot.png)
 
