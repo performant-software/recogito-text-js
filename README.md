@@ -1,7 +1,8 @@
 # RecogitoJS (Working Title)
 
 __RecogitoJS__ is an experiment to extract the annotation functionality
-of [Recogito](https://recogito.pelagios.org) into an independent, client-only JavaScript library. With __RecogitoJS__, we want to bring Recogito-like 
+of [Recogito](https://recogito.pelagios.org) to an independent, client-only 
+JavaScript library. With __RecogitoJS__, we want to bring Recogito-like 
 annotation to any website, and enable everyone to build customized annotation
 applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/index.html).
 
@@ -62,10 +63,10 @@ The goal is to encode annotations in JSON-LD, according to the
 ### Storing Annotations
 
 __RecogitoJS__ is a client-only library. That means it handles the
-user interaction in the browser. Storage of annotations in a server
+user interaction in the browser only. Storage of annotations on a server
 backend is beyond scope. Instead, there will be a JavaScript API
 (with configuration options and a bunch of events) for writing your
-own code that stores annotations on a server. 
+own code that stores annotations to a server. 
 
 Splitting out the [Recogito](https://github.com/pelagios/recogito2)
 annotation store into a separate project and/or providing a standard
@@ -73,7 +74,7 @@ storage connector would be neat as a future project.
 
 ## License
 
-[BSD 3-Clause](LICENSE) (feel free to use this code in whatever way
+[BSD 3-Clause](LICENSE) (= feel free to use this code in whatever way
 you wish. But keep the attribution/license file, and if this code
 breaks something, don't complain to us :-) 
 
