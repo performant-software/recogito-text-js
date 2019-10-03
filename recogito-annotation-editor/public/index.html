@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Embeddable Text Annotation</title>
+    <title>RecogitoJS Text Annotation Example</title>
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     <style>
       html, body {
@@ -37,5 +37,32 @@ ceasing and would not let him get home.
       </pre>
       <div id="app"></div>
     </div>
+
+    <script type="text/javascript">
+      (function() {
+
+        // Intialize Recogito
+        var r = Recogito.init({
+          // Content <pre> to attach to 
+          content: 'content', 
+
+          // Temporary ony: app container must a sibiling -
+          // will handle this automatically in the future
+          container: 'app',
+
+          // The annotations - TODO follow W3C WebAnno model
+          annotations: [
+            {"annotation_id": "ce0ed291-766b-4763-8e91-90ce1d04e706", "anchor":"char-offset:106","bodies":[{"type":"QUOTE","value":"Troy"}]},
+            {"annotation_id": "447d4bea-08dc-4bd0-ae51-31f5ed7a95a0", "anchor":"char-offset:634","bodies":[{"type":"QUOTE","value":"death in battle"}]},
+            {"annotation_id": "d7197c87-b45d-4217-9c4f-27573030448f", "anchor":"char-offset:954","bodies":[{"type":"QUOTE","value":"Ithaca"}]}
+          ]
+        });
+    
+        // Just an example - not functional yet 
+        r.on('createAnnotation', function(a) {
+          // Do something
+        });
+      })();
+    </script>
   </body>
 </html>

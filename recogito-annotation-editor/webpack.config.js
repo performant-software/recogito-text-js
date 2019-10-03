@@ -10,7 +10,10 @@ const resolveAppPath = relativePath => path.resolve(APP_DIR, relativePath);
 module.exports = {
   entry: resolveAppPath('src'),
   output: {
-    filename: 'text-annotation-editor.min.js'
+    filename: 'text-annotation-editor.min.js',
+    library: 'Recogito',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   optimization: {
     splitChunks: {
@@ -60,7 +63,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin ({
-      inject: true,
+      inject: 'head',
       template: resolveAppPath('public/index.html')
     })
   ]
