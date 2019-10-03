@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Highlighter from 'recogito-text-layer/selection/Highlighter';
-import SelectionHandler from 'recogito-text-layer/selection/SelectionHandler';
+import Highlighter from 'recogito-text-highlights/selection/Highlighter';
+import SelectionHandler from 'recogito-text-highlights/selection/SelectionHandler';
 import Editor from './editor/Editor';
 
 import 'themes/theme.scss';
