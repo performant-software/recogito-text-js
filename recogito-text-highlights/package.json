@@ -1,0 +1,39 @@
+{
+  "name": "recogito-text-layer",
+  "version": "0.0.1",
+  "description": "An experiment to encapsulate the Recogito text annotation UI into a reusable JS library",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/webpack-dev-server --mode development",
+    "test": "./node_modules/.bin/mocha --require @babel/register",
+    "build": "webpack --config webpack.config.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pelagios/embeddable-text-annotation.git"
+  },
+  "author": "",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/pelagios/embeddable-text-annotation/issues"
+  },
+  "homepage": "https://github.com/pelagios/embeddable-text-annotation#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
+    "babel-loader": "^8.0.6",
+    "chai": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mocha": "^6.2.1",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
+  },
+  "dependencies": {
+    "tiny-emitter": "^2.1.0"
+  }
+}
