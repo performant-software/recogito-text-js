@@ -21,7 +21,8 @@ The plan is to organize the project into a number of sub-modules.
 
 To run the project in development mode:
 
-- Enter the `recogito-text-highlights` folder and run `npm install` to install dependencies
+- Enter the `recogito-text-highlights` folder and run `npm install` to 
+  install dependencies
 - Enter the `recogito-annotation-editor` folder and run `npm install`
 - Run `npm start` and go to [localhost:3000](http://localhost:3000)
 
@@ -29,8 +30,36 @@ To build the minified bundle, run `npm run build`.
 
 ## Using RecogitoJS
 
-At the moment, __RecogitoJS__ works only on plaintext content,
-contained in a single `<pre>` tag. Usage instructions: coming soon.
+At the moment, __RecogitoJS__ works only on plaintext content, contained 
+in a single `<pre>` tag. The example below shows how to make a text 
+annotate-able with a few lines of JavaScript.
+
+__Note: this example is work in progress. The API will change!__
+
+```html
+<script type="text/javascript">
+  (function() {
+
+    // Intialize Recogito
+    var r = Recogito.init({
+      // Content <pre> to attach to 
+      content: 'content', 
+
+      // Temporary only: app container must a sibiling -
+      // will handle this automatically in the future
+      container: 'app',
+
+      // The annotations - TODO follow W3C WebAnno model
+      annotations: [ ... ]
+    });
+
+    // Just an example - not functional yet 
+    r.on('createAnnotation', function(a) {
+      // Do something
+    });
+  })();
+</script>
+```
 
 ### Annotation Format
 
@@ -64,9 +93,8 @@ The goal is to encode annotations in JSON-LD, according to the
 
 __RecogitoJS__ is a client-only library. That means it handles the
 user interaction in the browser only. Storage of annotations on a server
-backend is beyond scope. Instead, there will be a JavaScript API
-(with configuration options and a bunch of events) for writing your
-own code that stores annotations to a server. 
+backend is beyond scope. Instead, you can use the JavaScript API to 
+implement your own backend storage code. 
 
 Splitting out the [Recogito](https://github.com/pelagios/recogito2)
 annotation store into a separate project and/or providing a standard
