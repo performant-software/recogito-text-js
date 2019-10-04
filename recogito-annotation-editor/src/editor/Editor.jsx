@@ -48,7 +48,7 @@ export default class Editor extends Component {
 
   setPosition = () => {
     const { x, y, height } = this.props.bounds; 
-    return { left: x, top: y + height };
+    return { left: x + window.scrollX, top: y + height + window.scrollY };
   };
 
   render() {
