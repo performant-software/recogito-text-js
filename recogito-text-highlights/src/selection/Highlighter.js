@@ -4,8 +4,9 @@ const TEXT = 3; // HTML DOM node type for text nodes
 
 export default class Highlighter {
 
-  constructor(element) {
+  constructor(element, styleRules) {
     this.el = element;
+    this.styleRules = styleRules;
   }
 
   init = annotations => {
@@ -44,6 +45,7 @@ export default class Highlighter {
     range.setEnd(domEnd.node, domEnd.offset);
     
     const spans = this.wrapRange(range);
+    this.applyStyles(annotation, spans);
     this.bindAnnotation(annotation, spans);
   }
 
@@ -58,6 +60,11 @@ export default class Highlighter {
     } else {
       this._addAnnotation(annotation);
     }
+  }
+
+  applyStyles = (annotation, spans) => {
+    // TODO implement a proper (configurable) styling mechanism
+    spans.forEach(span => span.className = 'annotation');
   }
 
   bindAnnotation = (annotation, elements) => {
@@ -179,7 +186,6 @@ export default class Highlighter {
 
     const surround = range => {
       var wrapper = document.createElement('SPAN');
-      wrapper.className = 'annotation';
       range.surroundContents(wrapper);
       return wrapper;
     };
@@ -206,7 +212,6 @@ export default class Highlighter {
       // And wrap nodes in between, if any
       var centerWrappers = nodesBetween.reverse().map(function(node) {
         const wrapper = document.createElement('SPAN');
-        wrapper.className = 'annotation';
         node.parentNode.insertBefore(wrapper, node);
         wrapper.appendChild(node);
         return wrapper;
@@ -216,7 +221,7 @@ export default class Highlighter {
     }
   }
 
-  getAnnotationsAt = function(element) {
+  getAnnotationsAt = element => {
     // Helper to get all annotations in case of multipe nested annotation spans
     var getAnnotationsRecursive = function(element, a) {
           var annotations = (a) ? a : [ ],
