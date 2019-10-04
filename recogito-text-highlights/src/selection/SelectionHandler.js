@@ -23,7 +23,7 @@ export default class SelectionHandler extends EventEmitter {
       const annotationSpan = evt.target.closest('.annotation');
       if (annotationSpan) {
         this.emit('select', { 
-          selection: annotationSpan.annotation,
+          selection: this.highlighter.getAnnotationsAt(annotationSpan)[0],
           clientRect: annotationSpan.getBoundingClientRect() 
         });
       } else {

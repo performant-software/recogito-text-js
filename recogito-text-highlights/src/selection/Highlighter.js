@@ -206,6 +206,7 @@ export default class Highlighter {
       // And wrap nodes in between, if any
       var centerWrappers = nodesBetween.reverse().map(function(node) {
         const wrapper = document.createElement('SPAN');
+        wrapper.className = 'annotation';
         node.parentNode.insertBefore(wrapper, node);
         wrapper.appendChild(node);
         return wrapper;
@@ -213,6 +214,27 @@ export default class Highlighter {
 
       return [ startWrapper ].concat(centerWrappers,  [ endWrapper ]);
     }
+  }
+
+  getAnnotationsAt = function(element) {
+    // Helper to get all annotations in case of multipe nested annotation spans
+    var getAnnotationsRecursive = function(element, a) {
+          var annotations = (a) ? a : [ ],
+              parent = element.parentNode;
+
+          annotations.push(element.annotation);
+
+          return (parent.classList.contains('annotation')) ?
+            getAnnotationsRecursive(parent, annotations) : annotations;
+        },
+
+        sortByQuoteLength = function(annotations) {
+          return annotations.sort(function(a, b) {
+            return new TextAnnotation(a).quote.length - new TextAnnotation(b).quote.length;
+          });
+        };
+
+    return sortByQuoteLength(getAnnotationsRecursive(element));
   }
 
 }
