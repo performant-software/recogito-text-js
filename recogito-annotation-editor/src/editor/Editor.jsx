@@ -63,8 +63,8 @@ export default class Editor extends Component {
     return { left: x + window.scrollX, top: y + height + window.scrollY };
   };
 
-  checkVisibility = evt => {
-    console.log('visibility', evt);
+  onVisible = visible => {
+    console.log(visible, this._ref.getBoundingClientRect());
   }
 
   render() {
@@ -84,8 +84,9 @@ export default class Editor extends Component {
       }, []);
 
       return this.props.open && (
-        <VisibilitySensor onChange={this.checkVisibility}> 
+        <VisibilitySensor onChange={this.onVisible}>
           <div
+            ref={el => this._ref = el}
             className="r6o-editor"
             style={position} >
 
