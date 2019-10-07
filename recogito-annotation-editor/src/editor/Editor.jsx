@@ -58,13 +58,29 @@ export default class Editor extends Component {
     this.props.onUpdateAnnotation(updated, this.props.annotation);
   }
 
-  setPosition = () => {
-    const { x, y, height } = this.props.bounds; 
-    return { left: x + window.scrollX, top: y + height + window.scrollY };
+  setPosition = clippedBounds => {
+    if (!clippedBounds) {
+      const { x, y, height } = this.props.bounds; 
+      return { left: x + window.scrollX, top: y + height + window.scrollY };
+    } else {
+      // Default bounds are clipped - flip horizontally
+      if (clippedBounds.right > window.innerWidth) {
+        this._ref.classList.add('align-right');
+        this._ref.style.left = `${this.props.bounds.right - clippedBounds.width + window.scrollX}px`;
+      }
+
+      // Flip vertically
+      if (clippedBounds.bottom > window.innerHeight) {
+        this._ref.classList.add('align-bottom');
+        this._ref.style.top = 'auto';
+        this._ref.style.bottom = `${window.innerHeight - this.props.bounds.top - window.scrollY}px`;
+      }
+    }
   };
 
-  onVisible = visible => {
-    console.log(visible, this._ref.getBoundingClientRect());
+  onVisible = fullyVisible => {
+    if (!fullyVisible)
+      this.setPosition(this._ref.getBoundingClientRect());
   }
 
   render() {

@@ -51,3 +51,28 @@
   }
 
 }
+
+.r6o-editor.align-right {
+  margin-left:8px;
+
+  .arrow {
+    left:auto;
+    right:12px;
+  }
+
+}
+
+.r6o-editor.align-bottom {
+  margin-bottom:14px;
+
+  .arrow {
+    top:auto;
+    bottom:-12px;
+  }
+
+  .arrow::after {
+    top:-11px;
+    box-shadow:none;
+  }
+
+}
