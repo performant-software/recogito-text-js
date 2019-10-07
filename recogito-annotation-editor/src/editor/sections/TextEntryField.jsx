@@ -5,9 +5,8 @@ import ContentEditable from 'react-contenteditable';
 const TextEntryField = props => {
 
   const onKeyPress = evt => {
-    if (evt.which === 13 && evt.ctrlKey) {
+    if (evt.which === 13 && evt.ctrlKey)
       props.onOk();
-    }
   }
 
   return (

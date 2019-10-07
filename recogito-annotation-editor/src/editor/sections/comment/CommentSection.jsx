@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import TextEntryField from '../TextEntryField';
 
-/**
- * Sections map a specific WebAnno body type to a GUI component.
- */
+/** Sections map a specific WebAnno body type to a GUI component **/
 export default class CommentSection extends Component {
 
   onChange = evt =>
