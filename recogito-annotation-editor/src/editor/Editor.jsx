@@ -59,6 +59,14 @@ export default class Editor extends Component {
   }
 
   setPosition = clippedBounds => {
+    // Ref only exists if this is i) either an 'annotation change' (selecting
+    // an annotation right after a different one, or ii) a setPosition call
+    // in response to a position outside the viewport. Either way, make sure
+    // we don't carry 'align-*' class names from the previous annotation
+    if (this._ref) {
+      this._ref.className = 'r6o-editor';
+    }
+
     if (!clippedBounds) {
       const { x, y, height } = this.props.bounds; 
       return { left: x + window.scrollX, top: y + height + window.scrollY };
