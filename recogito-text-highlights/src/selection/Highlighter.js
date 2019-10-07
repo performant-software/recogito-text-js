@@ -31,9 +31,6 @@ export default class Highlighter {
   }
 
   _addAnnotation = annotation => {
-    
-    console.log(annotation);
-
     const [ domStart, domEnd ] = this.charOffsetsToDOMPosition([ annotation.start, annotation.end ]);
 
     const range = document.createRange();
