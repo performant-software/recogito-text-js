@@ -37,33 +37,40 @@ annotate-able with a few lines of JavaScript.
 __Note: this example is work in progress. The API will change!__
 
 ```html
-<script type="text/javascript">
-  (function() {
+<body>
+  <!-- nested container/content structure temporary only -->
+  <div id="container">
+    <pre id="content" class="plaintext">My text to annotate.</pre>
+    <div id="app"></div>
+  </div>
 
-    // Intialize Recogito
-    var r = Recogito.init({
-      // Content <pre> to attach to 
-      content: 'content', 
+  <script type="text/javascript">
+    (function() {
+      // Intialize Recogito
+      var r = Recogito.init({
+        // ID of the content <pre> to attach to 
+        content: 'content', 
+        // Temporary only: app container must a sibiling -
+        // will handle this automatically in the future
+        container: 'app'
+      });
 
-      // Temporary only: app container must a sibiling -
-      // will handle this automatically in the future
-      container: 'app',
+      r.loadAnnotations('annotations.w3c.json').then(function() {
+        // Returns a promise, in case you want to do something after loading
+      });
 
-      // The annotations - TODO follow W3C WebAnno model
-      annotations: [ ... ]
-    });
-
-    // Just an example - not functional yet 
-    r.on('createAnnotation', function(a) {
-      // Do something
-    });
-  })();
-</script>
+      // Just an example - not functional yet 
+      r.on('createAnnotation', function(annotation) {
+        // Do something
+      });
+    })();
+  </script>
+</body>
 ```
 
 ### Annotation Format
 
-The goal is to encode annotations in JSON-LD, according to the
+Annotations are encoded in JSON-LD, according to the
 [W3C Web Annotation model](https://www.w3.org/TR/annotation-model/).
 
 ```json
