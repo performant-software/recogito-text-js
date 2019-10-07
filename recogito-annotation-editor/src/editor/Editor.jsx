@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
 import CommentSection from './sections/comment/CommentSection';
 
 const SECTIONS = {
@@ -62,6 +63,10 @@ export default class Editor extends Component {
     return { left: x + window.scrollX, top: y + height + window.scrollY };
   };
 
+  checkVisibility = evt => {
+    console.log('visibility', evt);
+  }
+
   render() {
     if (this.props.open) {
       const position = this.setPosition();
@@ -79,26 +84,28 @@ export default class Editor extends Component {
       }, []);
 
       return this.props.open && (
-        <div
-          className="r6o-editor"
-          style={position} >
+        <VisibilitySensor onChange={this.checkVisibility}> 
+          <div
+            className="r6o-editor"
+            style={position} >
 
-          <div className="arrow" />
-          <div className="inner">
-            <div>
-              {  sections }
-            </div>
-            <div className="footer">
-              <button 
-                className="r6o-btn outline"
-                onClick={this.props.onCancel}>Cancel</button>
+            <div className="arrow" />
+            <div className="inner">
+              <div>
+                {  sections }
+              </div>
+              <div className="footer">
+                <button 
+                  className="r6o-btn outline"
+                  onClick={this.props.onCancel}>Cancel</button>
 
-              <button 
-                className="r6o-btn "
-                onClick={this.onOk}>Ok</button>
+                <button 
+                  className="r6o-btn "
+                  onClick={this.onOk}>Ok</button>
+              </div>
             </div>
           </div>
-        </div>
+        </VisibilitySensor>
       )
     } else {
       return null;
