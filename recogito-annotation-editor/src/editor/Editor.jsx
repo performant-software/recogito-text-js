@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
-import TextEntryField from './sections/TextEntryField';
+import CommentSection from './sections/comment/CommentSection';
+
+const SECTIONS = {
+  TextualBody: CommentSection
+}
 
 export default class Editor extends Component {
 
-  state = {
-    text: null
-  }
-
-  // TODO clean up
-  componentWillReceiveProps(props) {
-    if (props.annotation) {
-      const firstCommentBody = props.annotation.bodies.find(b => b.type === 'COMMENT');
-      this.setState({ text: firstCommentBody ? firstCommentBody.value : null });
-    } else {
-      this.setState({ text: null });
+  constructor(props) {
+    super(props);
+    this.state = {
+      sections: this._createBodyState(this.props)
     }
   }
 
+  // State consists of a tuple (original body, current state)
+  _createBodyState = props =>
+    props.annotation ? 
+      props.annotation.bodies.map(body => ({ body, current: { ...body } })) : [];
+
+  componentWillReceiveProps(props) {
+    if (props.annotation)
+      this.setState({ sections: this._createBodyState(props) });
+    else 
+      this.setState({ sections: [] });
+  }
+
+  // Key listeners for Escape
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown, false);
   }
@@ -31,19 +41,20 @@ export default class Editor extends Component {
       this.props.onCancel();
   }
 
-  onChangeText = evt => this.setState({ text: evt.target.value });
+  // Section update keeps original body, updates current
+  onSectionChanged = idx => updated => {
+    const nextState = {
+      body: this.state.sections[idx].body,
+      current: updated
+    }
+
+    this.setState({ sections: Object.assign([], this.state.sections, { [idx]: nextState })} );
+  }
 
   onOk = () => {
-    const updated = {
-      ...this.props.annotation,
-      bodies: [ 
-        ...this.props.annotation.bodies.filter(b => b.type !== 'COMMENT'),
-        { type: 'COMMENT', value: this.state.text }
-      ]
-    };
-
-    this.setState({ text: null });
-    this.props.onUpdateAnnotation(updated);
+    const updated = this.props.annotation.clone();
+    updated.bodies = this.state.sections.map(s => s.current);
+    this.props.onUpdateAnnotation(updated, this.props.annotation);
   }
 
   setPosition = () => {
@@ -54,6 +65,19 @@ export default class Editor extends Component {
   render() {
     if (this.props.open) {
       const position = this.setPosition();
+
+      const sections = this.props.annotation.bodies.reduce((components, body, idx) => {
+        const cls = SECTIONS[body.type];
+        const component = React.createElement(cls, {
+          key: idx,
+          body: this.state.sections[idx].current, 
+          onChange: this.onSectionChanged(idx), 
+          onOk: this.onOk
+        });
+
+        return cls ? [ ...components, component ] : component;
+      }, []);
+
       return this.props.open && (
         <div
           className="r6o-editor"
@@ -62,10 +86,7 @@ export default class Editor extends Component {
           <div className="arrow" />
           <div className="inner">
             <div>
-              <TextEntryField 
-                content={this.state.text}
-                onChange={this.onChangeText}
-                onOk={this.onOk} />
+              {  sections }
             </div>
             <div className="footer">
               <button 

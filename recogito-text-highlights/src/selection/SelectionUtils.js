@@ -1,3 +1,5 @@
+import TextAnnotation from "../annotation/text/TextAnnotation";
+
 export const trimRange = range => {
   let quote = range.toString();
   let leadingSpaces = 0;
@@ -32,10 +34,24 @@ export const rangeToAnnotationStub = (range, containerEl) => {
   rangeBefore.setStart(containerEl, 0);
   rangeBefore.setEnd(range.startContainer, range.startOffset);
 
-  return {
-    anchor: 'char-offset:' + rangeBefore.toString().length,
-    bodies: [
-      { type: 'QUOTE', value: range.toString() }
-    ]
-  };
+  const quote = range.toString();
+  const start = rangeBefore.toString().length;
+
+  return new TextAnnotation({ 
+    '@context': 'http://www.w3.org/ns/anno.jsonld',
+    'type': 'Annotation',
+    'body': [{
+      'type': 'TextualBody'
+    }],
+    'target': {
+      'selector': [{
+        'type': 'TextQuoteSelector',
+        'exact': quote
+      }, {
+        'type': 'TextPositionSelector',
+        'start': start,
+        'end': start + quote.length
+      }]
+    }
+  });
 };

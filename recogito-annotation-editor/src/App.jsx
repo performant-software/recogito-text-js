@@ -11,15 +11,19 @@ export default class App extends Component {
   state = {
     showEditor: false,
     selectionBounds: null,
-    annotation: null
+    selectedAnnotation: null
   }
 
   _clearState = () => {
     this.setState({
       showEditor: false,
       selectionBounds: null,
-      annotation: null
+      selectedAnnotation: null
     });
+  }
+
+  setAnnotations = annotations => {
+    this.highlighter.init(annotations);
   }
 
   closeEditor = () => {
@@ -30,9 +34,7 @@ export default class App extends Component {
   componentDidMount() {
     this.highlighter = new Highlighter(this.props.content);
     this.selectionHandler = new SelectionHandler(this.props.content, this.highlighter);
-
     this.selectionHandler.on('select', this.onSelect);
-    this.highlighter.init(this.props.annotations);
   }
 
   onSelect = evt => {
@@ -41,15 +43,15 @@ export default class App extends Component {
       this.setState({ 
         showEditor: true, 
         selectionBounds: clientRect,
-        annotation: selection 
+        selectedAnnotation: selection 
       });
     else 
       this._clearState();
   }
 
-  onUpdateAnnotation = annotation => {
+  onUpdateAnnotation = (annotation, maybePrevious) => {
     this.selectionHandler.clearSelection();
-    this.highlighter.addOrUpdateAnnotation(annotation);
+    this.highlighter.addOrUpdateAnnotation(annotation, maybePrevious);
     this._clearState();
   }
 
@@ -58,7 +60,7 @@ export default class App extends Component {
       <Editor
         open={this.state.showEditor}
         bounds={this.state.selectionBounds}
-        annotation={this.state.annotation}
+        annotation={this.state.selectedAnnotation}
         onUpdateAnnotation={this.onUpdateAnnotation}
         onCancel={this.closeEditor}>
       </Editor>

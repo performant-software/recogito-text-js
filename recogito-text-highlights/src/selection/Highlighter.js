@@ -1,4 +1,4 @@
-import TextAnnotation from '../annotation/TextAnnotation';
+import TextAnnotation from '../annotation/text/TextAnnotation';
 
 const TEXT = 3; // HTML DOM node type for text nodes
 
@@ -31,14 +31,10 @@ export default class Highlighter {
   }
 
   _addAnnotation = annotation => {
-    const a = new TextAnnotation(annotation);
+    
+    console.log(annotation);
 
-    const bounds = {
-      start: a.charOffset,
-      end: a.charOffset + a.quote.length
-    }
-
-    const [ domStart, domEnd ] = this.charOffsetsToDOMPosition([ bounds.start, bounds.end ]);
+    const [ domStart, domEnd ] = this.charOffsetsToDOMPosition([ annotation.start, annotation.end ]);
 
     const range = document.createRange();
     range.setStart(domStart.node, domStart.offset);
@@ -49,11 +45,11 @@ export default class Highlighter {
     this.bindAnnotation(annotation, spans);
   }
 
-  addOrUpdateAnnotation = annotation => {
+  addOrUpdateAnnotation = (annotation, maybePrevious) => {
     // TODO just a hack for now, until we figure out how to handle IDs in the new system
     const allAnnotationSpans = document.querySelectorAll('.annotation');
-    const spansForThisAnnotation = Array.prototype.slice.call(allAnnotationSpans)
-      .filter(span => span.annotation.anchor === annotation.anchor);
+    const spansForThisAnnotation = maybePrevious ? Array.prototype.slice.call(allAnnotationSpans)
+      .filter(span => span.annotation === maybePrevious) : [];
 
     if (spansForThisAnnotation.length > 0) {
       spansForThisAnnotation.forEach(span => span.annotation = annotation);
@@ -70,8 +66,8 @@ export default class Highlighter {
   bindAnnotation = (annotation, elements) => {
     elements.forEach(el => {
       el.annotation = annotation;
-      if (annotation.annotation_id)
-        el.dataset.id = annotation.annotation_id;
+      if (annotation.id)
+        el.dataset.id = annotation.id;
     });
   }
 
