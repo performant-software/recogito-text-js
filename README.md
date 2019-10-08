@@ -38,21 +38,13 @@ __Note: this example is work in progress. The API will change!__
 
 ```html
 <body>
-  <!-- nested container/content structure temporary only -->
-  <div id="container">
-    <pre id="content" class="plaintext">My text to annotate.</pre>
-    <div id="app"></div>
-  </div>
+  <pre id="content" class="plaintext">My text to annotate.</pre>
 
   <script type="text/javascript">
     (function() {
       // Intialize Recogito
       var r = Recogito.init({
-        // ID of the content <pre> to attach to 
-        content: 'content', 
-        // Temporary only: app container must a sibiling -
-        // will handle this automatically in the future
-        container: 'app'
+        content: 'content' // ID of the content <pre> to attach to 
       });
 
       r.loadAnnotations('annotations.w3c.json');
