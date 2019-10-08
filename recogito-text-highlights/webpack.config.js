@@ -21,18 +21,7 @@ module.exports = {
       }
     }]
   },
-  devServer: {
-    contentBase: resolveAppPath('public'),
-    compress: true,
-    hot: true,
-    host: process.env.HOST || 'localhost',
-    port: 3000,
-    publicPath: '/'
-  },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: resolveAppPath('public/index.html')
-    })
+    new HtmlWebpackPlugin()
   ]
 }

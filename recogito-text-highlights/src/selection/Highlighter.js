@@ -1,4 +1,4 @@
-import TextAnnotation from '../annotation/text/TextAnnotation';
+import TextAnnotation from '../annotation/WebAnnotation';
 
 const TEXT = 3; // HTML DOM node type for text nodes
 
@@ -228,7 +228,7 @@ export default class Highlighter {
 
         sortByQuoteLength = function(annotations) {
           return annotations.sort(function(a, b) {
-            return new TextAnnotation(a).quote.length - new TextAnnotation(b).quote.length;
+            return new WebAnnotation(a).quote.length - new WebAnnotation(b).quote.length;
           });
         };
 

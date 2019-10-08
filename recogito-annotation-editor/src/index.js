@@ -2,37 +2,87 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Emitter from 'tiny-emitter';
-import TextAnnotation from 'recogito-text-highlights/annotation/text/TextAnnotation';
+import WebAnnotation from 'recogito-text-highlights/annotation/WebAnnotation';
 import App from './App';
 
+/**
+ * The entrypoint into the application. Provides the 
+ * externally visible JavaScript API.
+ */
 class Recogito {
 
   constructor(config) {
+    // Programmatic calls to this instance from outside are forwarded
+    // through a ref
     this._app = React.createRef();
+
+    // Event handling via tiny-emitter
     this._emitter = new Emitter();
 
+    // <pre> content is wrapped in a DIV, and the application 
+    // container is attached as a sibling. This way the content and
+    // editor popup share the same CSS position reference frame
     const content = document.getElementById(config.content);
-    const container = document.getElementById(config.container);
+
+    const wrapper = document.createElement('DIV');
+    wrapper.style.position = 'relative';
+    content.parentNode.insertBefore(wrapper, content);
+    wrapper.appendChild(content);
+    
+    const container = document.createElement('DIV');
+    wrapper.appendChild(container);
 
     ReactDOM.render(
+
       <App 
         ref={this._app}
-        content={content} 
-        onAnnotationCreated={a => this._emitter.emit('createAnnotation', a)} 
-        onAnnotationUpdated={(a, previous)=> this._emitter.emit('updateAnnotation', a, previous)} />, container);
+        contentEl={content} 
+        onAnnotationCreated={this.handleAnnotationCreated} 
+        onAnnotationUpdated={this.handleAnnotationUpdated} 
+        onAnnotationDeleted={this.handleAnnotationDeleted} />,
+    
+    container);
   }
 
-  on = (event, handler) =>
+  handleAnnotationCreated = annotation => {
+    this._emitter.emit('createAnnotation', annotation);
+  }
+
+  handleAnnotationUpdated = (annotation, previous) => {
+    this._emitter.emit('updateAnnotation', annotation, previous);
+  }
+
+  handleAnnotationDeleted = annotation => {
+    this._emitter.emit('deleteAnnotation', annotation);
+  }
+  
+  /******************/               
+  /*  External API  */
+  /******************/               
+
+  /** 
+   * Loads JSON-LD WebAnnotations from the given URL.
+   */
+  loadAnnotations = url => axios.get(url).then(response => {
+    const annotations = response.data.map(a => new WebAnnotation(a));
+    this._app.current.setAnnotations(annotations);
+  });
+
+  /** 
+   * Adds an event handler.
+   */
+  on = (event, handler) => {
     this._emitter.on(event, handler);
+  }
 
-  off = (event, callback) => 
+  /** 
+   * Removes an event handler.
+   * 
+   * If no callback, removes all handlers for 
+   * the given event.
+   */
+  off = (event, callback) => {
     this._emitter.off(event, callback);
-
-  loadAnnotations = url => {
-    return axios.get(url).then(response => {
-      const annotations = response.data.map(a => new TextAnnotation(a));
-      this._app.current.setAnnotations(annotations);
-    });
   }
 
 }

@@ -1,4 +1,4 @@
-import TextAnnotation from "../annotation/text/TextAnnotation";
+import WebAnnotation from "../annotation/WebAnnotation";
 
 export const trimRange = range => {
   let quote = range.toString();
@@ -37,7 +37,7 @@ export const rangeToAnnotationStub = (range, containerEl) => {
   const quote = range.toString();
   const start = rangeBefore.toString().length;
 
-  return new TextAnnotation({ 
+  return new WebAnnotation({ 
     '@context': 'http://www.w3.org/ns/anno.jsonld',
     'type': 'Annotation',
     'body': [{

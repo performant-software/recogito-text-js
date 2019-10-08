@@ -4,7 +4,6 @@
   "description": "An experiment to encapsulate the Recogito text annotation UI into a reusable JS library",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server --mode development",
     "test": "./node_modules/.bin/mocha --require @babel/register",
     "build": "webpack --config webpack.config.js --mode production"
   },
