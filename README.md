@@ -69,7 +69,7 @@ __Note: this example is work in progress. The API will change!__
 ### Instance Methods
 
 #### loadAnnotations(url)
-Loads annotations from a JSON-LD source.
+Loads annotations from a JSON-LD source. (Returns a promise.)
 - `url` - the URL to HTTP GET the annotations from
 
 #### on(event, callback) 
@@ -82,6 +82,17 @@ Unsubscribe from an event. No callback unsubscribes all event
 handlers.
 - `event` - the name of the event to unsubscribe from
 - `callback` - the function used when binding to the event
+
+### Events
+
+#### createAnnotation(annotation)
+Fired when a new annotation is created
+- `annotation` - the W3C WebAnnotation stub
+
+#### updateAnnotation(annotation, previous)
+Fired when an existing annotation is updated
+- `annotation` - the updated W3C WebAnnotation
+- `previous` - the previous annotation state, before the update happend
 
 ### Annotation Format
 
