@@ -51,13 +51,14 @@ ceasing and would not let him get home.
           container: 'app'
         });
 
-        r.loadAnnotations('annotations.w3c.json').then(function() {
-          // console.log('Annotations loaded');
-        });
+        r.loadAnnotations('annotations.w3c.json');
     
-        // Just an example - not functional yet 
         r.on('createAnnotation', function(a) {
-          // Do something
+          console.log('created', a);
+        });
+
+        r.on('updateAnnotation', function(annotation, previous) {
+          console.log('updated', previous, 'with', annotation);
         });
       })();
     </script>
