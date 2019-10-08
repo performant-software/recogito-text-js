@@ -55,9 +55,7 @@ __Note: this example is work in progress. The API will change!__
         container: 'app'
       });
 
-      r.loadAnnotations('annotations.w3c.json').then(function() {
-        // Returns a promise, in case you want to do something after loading
-      });
+      r.loadAnnotations('annotations.w3c.json');
 
       // Just an example - not functional yet 
       r.on('createAnnotation', function(annotation) {
@@ -67,6 +65,23 @@ __Note: this example is work in progress. The API will change!__
   </script>
 </body>
 ```
+
+### Instance Methods
+
+#### loadAnnotations(url)
+Loads annotations from a JSON-LD source.
+- `url` - the URL to HTTP GET the annotations from
+
+#### on(event, callback) 
+Subscribe to an event
+- `event` - the name of the event
+- `callback` - the function to call when the event is emitted
+
+#### off(event[, callback])
+Unsubscribe from an event. No callback unsubscribes all event
+handlers.
+- `event` - the name of the event to unsubscribe from
+- `callback` - the function used when binding to the event
 
 ### Annotation Format
 

@@ -25,6 +25,9 @@ class Recogito {
   on = (event, handler) =>
     this._emitter.on(event, handler);
 
+  off = (event, callback) => 
+    this._emitter.off(event, callback);
+
   loadAnnotations = url => {
     return axios.get(url).then(response => {
       const annotations = response.data.map(a => new TextAnnotation(a));
