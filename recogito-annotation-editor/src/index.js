@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import Emitter from 'tiny-emitter';
 import TextAnnotation from 'recogito-text-highlights/annotation/text/TextAnnotation';
 import App from './App';
 
@@ -8,6 +9,7 @@ class Recogito {
 
   constructor(config) {
     this._app = React.createRef();
+    this._emitter = new Emitter();
 
     const content = document.getElementById(config.content);
     const container = document.getElementById(config.container);
@@ -15,12 +17,13 @@ class Recogito {
     ReactDOM.render(
       <App 
         ref={this._app}
-        content={content} />, container);
+        content={content} 
+        onAnnotationCreated={a => this._emitter.emit('createAnnotation', a)} 
+        onAnnotationUpdated={(a, previous)=> this._emitter.emit('updateAnnotation', a, previous)} />, container);
   }
 
-  on = (event, handler) => {
-    // console.log(`TODO: add ${event} handler`);
-  }
+  on = (event, handler) =>
+    this._emitter.on(event, handler);
 
   loadAnnotations = url => {
     return axios.get(url).then(response => {

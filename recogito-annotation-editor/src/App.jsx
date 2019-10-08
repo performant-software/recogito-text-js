@@ -49,10 +49,15 @@ export default class App extends Component {
       this._clearState();
   }
 
-  onUpdateAnnotation = (annotation, maybePrevious) => {
+  onUpdateAnnotation = (annotation, previous) => {
     this.selectionHandler.clearSelection();
-    this.highlighter.addOrUpdateAnnotation(annotation, maybePrevious);
+    this.highlighter.addOrUpdateAnnotation(annotation, previous);
     this._clearState();
+
+    if (previous.id) // ugly hack - temporary only
+      this.props.onAnnotationUpdated(annotation, previous);
+    else 
+      this.props.onAnnotationCreated(annotation);
   }
 
   render() {
