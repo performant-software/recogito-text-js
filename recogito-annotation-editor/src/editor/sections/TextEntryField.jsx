@@ -1,7 +1,10 @@
 import React from 'react';
 import ContentEditable from 'react-contenteditable';
 
-/** A basic text entry field, for reuse in different section types **/
+/** 
+ * A basic text entry field, for reuse in different 
+ * section types.
+ */
 const TextEntryField = props => {
 
   const onKeyPress = evt => {

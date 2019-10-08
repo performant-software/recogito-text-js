@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-
 import Highlighter from 'recogito-text-highlights/selection/Highlighter';
 import SelectionHandler from 'recogito-text-highlights/selection/SelectionHandler';
 import Editor from './editor/Editor';
 
 import 'themes/theme.scss';
 
+/**
+ * Pulls the strings between the annotation highlight layer
+ * and the editor popup.
+ */
 export default class App extends Component {
 
   state = {
@@ -14,6 +17,7 @@ export default class App extends Component {
     selectedAnnotation: null
   }
 
+  /** Helper **/
   _clearState = () => {
     this.setState({
       showEditor: false,
@@ -22,34 +26,34 @@ export default class App extends Component {
     });
   }
 
-  setAnnotations = annotations => {
-    this.highlighter.init(annotations);
-  }
-
-  closeEditor = () => {
-    this._clearState();
-    this.selectionHandler.clearSelection();
-  }
-
   componentDidMount() {
     this.highlighter = new Highlighter(this.props.contentEl);
     this.selectionHandler = new SelectionHandler(this.props.contentEl, this.highlighter);
-    this.selectionHandler.on('select', this.onSelect);
+    this.selectionHandler.on('select', this.handleSelect);
   }
 
-  onSelect = evt => {
+  /** Selection on the text **/
+  handleSelect = evt => {
     const { selection, clientRect } = evt;
-    if (selection)
+    if (selection) {
       this.setState({ 
         showEditor: true, 
         selectionBounds: clientRect,
         selectedAnnotation: selection 
       });
-    else 
+    } else {
       this._clearState();
+    }
   }
 
-  onUpdateAnnotation = (annotation, previous) => {
+  /** Cancel button on editor **/
+  handleCancel = () => {
+    this._clearState();
+    this.selectionHandler.clearSelection();
+  }
+
+  /** TODO proper & explicit separation between CREATE and UPDATE **/
+  handleUpdateAnnotation = (annotation, previous) => {
     this.selectionHandler.clearSelection();
     this.highlighter.addOrUpdateAnnotation(annotation, previous);
     this._clearState();
@@ -60,14 +64,23 @@ export default class App extends Component {
       this.props.onAnnotationCreated(annotation);
   }
 
+  /******************/               
+  /*  External API  */
+  /******************/    
+
+  setAnnotations = annotations => {
+    this.highlighter.init(annotations);
+  }
+
   render() {
     return (
       <Editor
         open={this.state.showEditor}
         bounds={this.state.selectionBounds}
+        containerEl={this.props.containerEl}
         annotation={this.state.selectedAnnotation}
-        onUpdateAnnotation={this.onUpdateAnnotation}
-        onCancel={this.closeEditor}>
+        onUpdateAnnotation={this.handleUpdateAnnotation}
+        onCancel={this.handleCancel}>
       </Editor>
     );
   }  

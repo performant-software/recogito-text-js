@@ -15,7 +15,6 @@
     "react": "^16.10.1",
     "react-contenteditable": "^3.3.2",
     "react-dom": "^16.10.1",
-    "react-visibility-sensor": "^5.1.1",
     "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {

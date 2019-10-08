@@ -36,7 +36,8 @@ class Recogito {
 
       <App 
         ref={this._app}
-        contentEl={content} 
+        contentEl={content}
+        containerEl={wrapper} 
         onAnnotationCreated={this.handleAnnotationCreated} 
         onAnnotationUpdated={this.handleAnnotationUpdated} 
         onAnnotationDeleted={this.handleAnnotationDeleted} />,

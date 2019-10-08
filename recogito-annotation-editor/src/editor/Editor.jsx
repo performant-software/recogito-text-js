@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
-import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
 import CommentSection from './sections/comment/CommentSection';
 
+/** Maps WebAnno body types to section implementation classes **/
 const SECTIONS = {
   TextualBody: CommentSection
 }
 
+/** 
+ * The editor popup GUI component.
+ */
 export default class Editor extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       sections: this._createBodyState(this.props)
     }
   }
 
-  // State consists of a tuple (original body, current state)
-  _createBodyState = props =>
-    props.annotation ? 
-      props.annotation.bodies.map(body => ({ body, current: { ...body } })) : [];
+  /** The state is a list of tuples (original body vs. current state) **/
+  _createBodyState = props => {
+    return props.annotation ? props.annotation.bodies.map(body => ({ body, current: { ...body } })) : [];
+  }
 
+  /** On load, create the derived state from the props **/
   componentWillReceiveProps(props) {
     if (props.annotation)
       this.setState({ sections: this._createBodyState(props) });
@@ -27,7 +32,7 @@ export default class Editor extends Component {
       this.setState({ sections: [] });
   }
 
-  // Key listeners for Escape
+  /** Add key listeners, so we can close on Escape **/
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown, false);
   }
@@ -42,8 +47,55 @@ export default class Editor extends Component {
       this.props.onCancel();
   }
 
-  // Section update keeps original body, updates current
-  onSectionChanged = idx => updated => {
+  /**
+   * Will be triggered AFTER each call to 'render'. If the call
+   * attached an editor popup, there will be an element reference 
+   * in this._ref, and we can call this.setPosition. 
+   * 
+   * If the render call closed the popup, this._ref will be null.
+   */
+  componentDidUpdate() {
+    if (this._ref)
+      this.setPosition();
+  }
+
+  /** 
+   * Sets the position of the popup element, flipping its
+   * orientation if necessary.
+   */
+  setPosition = () => {
+    // Container element offset
+    const { offsetLeft, offsetTop, clientHeight } = this.props.containerEl;
+
+    // Re-set orientation class
+    this._ref.className = 'r6o-editor';
+
+    // Default orientation
+    const { x, y, height } = this.props.bounds; 
+    this._ref.style.top = `${y + height + window.scrollY - offsetLeft}px`;
+    this._ref.style.left = `${x + window.scrollX - offsetTop}px`;
+
+    const defaultOrientation = this._ref.getBoundingClientRect();
+
+    if (defaultOrientation.right > window.innerWidth) {
+      // Default bounds clipped - flip horizontally
+      this._ref.classList.add('align-right');
+      this._ref.style.left = `${this.props.bounds.right - defaultOrientation.width + window.scrollX - offsetLeft}px`;
+    }
+
+    // TODO figure this out...
+    /*
+    if (defaultOrientation.bottom > window.innerHeight) {
+      // Flip vertically
+      this._ref.classList.add('align-bottom');
+      this._ref.style.top = 'auto';
+      this._ref.style.bottom = `${clientHeight - this.props.bounds.top - offsetTop + window.scrollY}px`;
+    }
+    */
+  }
+
+  /** Handles an update to one of the sections/annotation bodies **/
+  handleSectionChanged = idx => updated => {
     const nextState = {
       body: this.state.sections[idx].body,
       current: updated
@@ -52,89 +104,60 @@ export default class Editor extends Component {
     this.setState({ sections: Object.assign([], this.state.sections, { [idx]: nextState })} );
   }
 
-  onOk = () => {
+  /** Handles OK button **/
+  handleOk = () => {
     const updated = this.props.annotation.clone();
     updated.bodies = this.state.sections.map(s => s.current);
     this.props.onUpdateAnnotation(updated, this.props.annotation);
   }
 
-  setPosition = clippedBounds => {
-    // Ref only exists if this is i) either an 'annotation change' (selecting
-    // an annotation right after a different one, or ii) a setPosition call
-    // in response to a position outside the viewport. Either way, make sure
-    // we don't carry 'align-*' class names from the previous annotation
-    if (this._ref) {
-      this._ref.className = 'r6o-editor';
-    }
+  /**
+   * Renders the list of sections, based on the annotation bodies for 
+   * which we have section implementations available.
+   */
+  renderSections = () => {
+    return this.props.annotation.bodies.reduce((components, body, idx) => {
+      const impl = SECTIONS[body.type];
 
-    if (!clippedBounds) {
-      const { x, y, height } = this.props.bounds; 
-      return { left: x + window.scrollX, top: y + height + window.scrollY };
-    } else {
-      // Default bounds are clipped - flip horizontally
-      if (clippedBounds.right > window.innerWidth) {
-        this._ref.classList.add('align-right');
-        this._ref.style.left = `${this.props.bounds.right - clippedBounds.width + window.scrollX}px`;
+      if (impl) {
+        const component = React.createElement(impl, {
+          key: idx,
+          body: this.state.sections[idx].current, 
+          onChange: this.handleSectionChanged(idx), 
+          onOk: this.handleOk
+        });
+
+        return [...components, component];
+      } else {
+        console.log(`Unsupported body type: ${body.type}`);
+        return components;
       }
-
-      // Flip vertically
-      if (clippedBounds.bottom > window.innerHeight) {
-        this._ref.classList.add('align-bottom');
-        this._ref.style.top = 'auto';
-        this._ref.style.bottom = `${window.innerHeight - this.props.bounds.top - window.scrollY}px`;
-      }
-    }
-  };
-
-  onVisible = fullyVisible => {
-    if (!fullyVisible)
-      this.setPosition(this._ref.getBoundingClientRect());
+    }, []);
   }
 
   render() {
-    if (this.props.open) {
-      const position = this.setPosition();
+    return this.props.open && (
+      <div
+        ref={el => this._ref = el}
+        className="r6o-editor">
 
-      const sections = this.props.annotation.bodies.reduce((components, body, idx) => {
-        const cls = SECTIONS[body.type];
-        const component = React.createElement(cls, {
-          key: idx,
-          body: this.state.sections[idx].current, 
-          onChange: this.onSectionChanged(idx), 
-          onOk: this.onOk
-        });
-
-        return cls ? [ ...components, component ] : component;
-      }, []);
-
-      return this.props.open && (
-        <VisibilitySensor onChange={this.onVisible}>
-          <div
-            ref={el => this._ref = el}
-            className="r6o-editor"
-            style={position} >
-
-            <div className="arrow" />
-            <div className="inner">
-              <div>
-                {  sections }
-              </div>
-              <div className="footer">
-                <button 
-                  className="r6o-btn outline"
-                  onClick={this.props.onCancel}>Cancel</button>
-
-                <button 
-                  className="r6o-btn "
-                  onClick={this.onOk}>Ok</button>
-              </div>
-            </div>
+        <div className="arrow" />
+        <div className="inner">
+          <div>
+            {  this.renderSections() }
           </div>
-        </VisibilitySensor>
-      )
-    } else {
-      return null;
-    }
+          <div className="footer">
+            <button 
+              className="r6o-btn outline"
+              onClick={this.props.onCancel}>Cancel</button>
+
+            <button 
+              className="r6o-btn "
+              onClick={this.handleOk}>Ok</button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
 }
