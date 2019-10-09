@@ -10,24 +10,6 @@ applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/i
 
 __This project is just getting started. To make it happen, we need your help. Get in touch if you want to contribute!__
 
-## Developer Information
-
-The plan is to organize the project into a number of sub-modules.
-
-- __recogito-text-highlights__ is a dependency-free JavaScript
-  library that handles text highlight rendering and mouse selection
-- __recogito-annotation-editor__ is a [React](https://reactjs.org/)
-  project for the annotation editor popup window
-
-To run the project in development mode:
-
-- Enter the `recogito-text-highlights` folder and run `npm install` to 
-  install dependencies
-- Enter the `recogito-annotation-editor` folder and run `npm install`
-- Run `npm start` and go to [localhost:3000](http://localhost:3000)
-
-To build the minified bundle, run `npm run build`.
-
 ## Using RecogitoJS
 
 At the moment, __RecogitoJS__ works only on plaintext content, contained 
@@ -70,6 +52,24 @@ with just a few lines of JavaScript.
 ```
 
 The full API documentation is on the [Wiki](../../wiki).
+
+## Developer Information
+
+The plan is to organize the project into a number of sub-modules.
+
+- __recogito-text-highlights__ is a dependency-free JavaScript
+  library that handles text highlight rendering and mouse selection
+- __recogito-annotation-editor__ is a [React](https://reactjs.org/)
+  project for the annotation editor popup window
+
+To run the project in development mode:
+
+- Enter the `recogito-text-highlights` folder and run `npm install` to 
+  install dependencies
+- Enter the `recogito-annotation-editor` folder and run `npm install`
+- Run `npm start` and go to [localhost:3000](http://localhost:3000)
+
+To build the minified bundle, run `npm run build`.
 
 ## Annotation Format
 
