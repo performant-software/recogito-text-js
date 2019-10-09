@@ -133,6 +133,7 @@ export default class Editor extends Component {
       if (impl) {
         const component = React.createElement(impl, {
           key: idx,
+          readOnly: this.props.readOnly,
           body: this.state.sections[idx].current, 
           onChange: this.handleSectionChanged(idx), 
           onOk: this.handleOk
@@ -157,15 +158,23 @@ export default class Editor extends Component {
           <div>
             {  this.renderSections() }
           </div>
-          <div className="footer">
-            <button 
-              className="r6o-btn outline"
-              onClick={this.props.onCancel}>Cancel</button>
-
-            <button 
-              className="r6o-btn "
-              onClick={this.handleOk}>Ok</button>
-          </div>
+          { this.props.readOnly ? (
+            <div className="footer">
+              <button
+                className="r6o-btn" 
+                onClick={this.props.onCancel}>Close</button>
+            </div>
+          ) : (
+            <div className="footer">
+              <button 
+                className="r6o-btn outline"
+                onClick={this.props.onCancel}>Cancel</button>
+  
+              <button 
+                className="r6o-btn "
+                onClick={this.handleOk}>Ok</button>
+            </div>
+          )}
         </div>
       </div>
     )

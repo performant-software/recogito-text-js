@@ -21,7 +21,11 @@ export default class CommentSection extends Component {
   }
 
   render() {
-    return(
+    return this.props.readOnly ? (
+      <div className="r6o-section comment">
+        {this.props.body.value}
+      </div>
+    ) : (
       <TextEntryField 
         content={this.props.body.value} 
         onChange={this.onChange} 

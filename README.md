@@ -44,7 +44,8 @@ __Note: this example is work in progress. The API will change!__
     (function() {
       // Intialize Recogito
       var r = Recogito.init({
-        content: 'content' // ID of the content <pre> to attach to 
+        content: 'content', // ID of the content <pre> to attach to
+        readOnly: false     // Set to true for read-only display of annotations (default = false)
       });
 
       r.loadAnnotations('annotations.w3c.json');

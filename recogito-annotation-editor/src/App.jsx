@@ -79,6 +79,7 @@ export default class App extends Component {
     return (
       <Editor
         open={this.state.showEditor}
+        readOnly={this.props.readOnly}
         bounds={this.state.selectionBounds}
         containerEl={this.props.containerEl}
         annotation={this.state.selectedAnnotation}
