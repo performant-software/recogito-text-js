@@ -83,6 +83,7 @@ class Recogito {
   loadAnnotations = url => axios.get(url).then(response => {
     const annotations = response.data.map(a => new WebAnnotation(a));
     this._app.current.setAnnotations(annotations);
+    return annotations;
   });
 
   /** 
