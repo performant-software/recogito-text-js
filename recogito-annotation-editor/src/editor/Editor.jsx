@@ -65,7 +65,7 @@ export default class Editor extends Component {
    */
   setPosition = () => {
     // Container element offset
-    const { offsetLeft, offsetTop, clientHeight } = this.props.containerEl;
+    const { offsetLeft, offsetTop } = this.props.containerEl;
     const { scrollX, scrollY } = window;
 
     // Re-set orientation class
@@ -73,8 +73,8 @@ export default class Editor extends Component {
 
     // Default orientation
     const { x, y, height, top } = this.props.bounds; 
-    this._ref.style.top = `${y + height + scrollY - offsetLeft}px`;
-    this._ref.style.left = `${x + scrollX - offsetTop}px`;
+    this._ref.style.top = `${y + height + scrollY - offsetTop}px`;
+    this._ref.style.left = `${x + scrollX - offsetLeft}px`;
 
     const defaultOrientation = this._ref.getBoundingClientRect();
 
