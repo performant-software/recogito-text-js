@@ -8,7 +8,7 @@ applications more easily. [Try the demo](https://pelagios.org/recogito-text-js/i
 
 ![Screenshot](screenshot.png)
 
-__This project is just getting started. To make it happen, we need your help. Get in touch if you want to contribute.__
+__This project is just getting started. To make it happen, we need your help. Get in touch if you want to contribute!__
 
 ## Developer Information
 
@@ -69,9 +69,9 @@ with just a few lines of JavaScript.
 </body>
 ```
 
-The full API documentation is on the [Wiki](wiki).
+The full API documentation is on the [Wiki](../../wiki).
 
-### Annotation Format
+## Annotation Format
 
 RecogitoJS supports annotations in JSON-LD, according to the
 [W3C Web Annotation model](https://www.w3.org/TR/annotation-model/).
@@ -98,6 +98,17 @@ RecogitoJS supports annotations in JSON-LD, according to the
   }
 }
 ```
+
+## Next Steps
+
+This project is just gettings started. Ultimately, we'd like to port the full
+range of features from Recogito to RecogitoJS. For now, however, the following 
+things are highest up on the wishlist: 
+
+- Geo-Tagging via the Recogito API
+- TEI annotation via [CETEIcean](https://github.com/TEIC/CETEIcean)
+- A generic semantic tagging component based on Wikidata and/or the OpenRefine 
+  Reconciliation API specification
 
 ## License
 
