@@ -11,7 +11,7 @@ export default class WebAnnotation {
 
   /** An equality check based on the underlying object **/
   isEqual(other) {
-    return this._annotation === other._annotation;
+    return other ? this._annotation === other._annotation : false;
   }
 
   /*************************************/ 
