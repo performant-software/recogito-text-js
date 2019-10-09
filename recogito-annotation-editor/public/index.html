@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+    <div>
+      <button id="add-annotation">Add Annotation</button>
+    </div>
     <pre id="content" class="plaintext">
 Tell me, O muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy. 
 Many cities did he visit, and many were the nations with whose manners and customs he was acquainted; moreover 
@@ -37,7 +40,6 @@ ceasing and would not let him get home.
 
     <script type="text/javascript">
       (function() {
-
         // Intialize Recogito
         var r = Recogito.init({
           content: 'content' // Id of the <pre> element to attach to 
@@ -51,6 +53,28 @@ ceasing and would not let him get home.
 
         r.on('updateAnnotation', function(annotation, previous) {
           console.log('updated', previous, 'with', annotation);
+        });
+
+        // Wire the 'Add Annotation' button
+        document.getElementById('add-annotation').addEventListener('click', function() {
+          r.addAnnotation({
+            '@context': 'http://www.w3.org/ns/anno.jsonld',
+            'type': 'Annotation',
+            'body': [{
+              'type': 'TextualBody', 
+              'value': 'This annotation was added via JS.'
+            }],
+            'target': {
+              'selector': [{
+                'type': 'TextQuoteSelector',
+                'exact': 'that ingenious hero'
+              }, {
+                'type': 'TextPositionSelector', 
+                'start': 20, 
+                'end': 39
+              }]
+            }
+          });
         });
       })();
     </script>

@@ -67,6 +67,10 @@ export default class App extends Component {
   /*  External API  */
   /******************/    
 
+  addAnnotation = annotation => {
+    this.highlighter.addOrUpdateAnnotation(annotation);
+  }
+
   setAnnotations = annotations => {
     this.highlighter.init(annotations);
   }

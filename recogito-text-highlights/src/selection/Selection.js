@@ -45,10 +45,10 @@ export default class Selection {
   }
 
   toAnnotation = () => {
-    const a = Object.assign({
+    const a = Object.assign({}, this._stub, {
       '@context': 'http://www.w3.org/ns/anno.jsonld',
       'type': 'Annotation'
-    }, this._stub, {})
+    });
 
     return new WebAnnotation(a);
   }

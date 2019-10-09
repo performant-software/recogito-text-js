@@ -59,7 +59,14 @@ class Recogito {
   
   /******************/               
   /*  External API  */
-  /******************/               
+  /******************/     
+  
+  /**
+   * Adds a JSON-LD WebAnnotation to the annotation layer.
+   */
+  addAnnotation = annotation => {
+    this._app.current.addAnnotation(new WebAnnotation(annotation));
+  }
 
   /** 
    * Loads JSON-LD WebAnnotations from the given URL.
