@@ -4,9 +4,9 @@ const TEXT = 3; // HTML DOM node type for text nodes
 
 export default class Highlighter {
 
-  constructor(element, styleRules) {
+  constructor(element, formatter) {
     this.el = element;
-    this.styleRules = styleRules;
+    this.formatter = formatter;
   }
 
   init = annotations => {
@@ -56,8 +56,8 @@ export default class Highlighter {
   }
 
   applyStyles = (annotation, spans) => {
-    // TODO implement a proper (configurable) styling mechanism
-    spans.forEach(span => span.className = 'annotation');
+    const extraClasses = this.formatter ? this.formatter(annotation) : '';
+    spans.forEach(span => span.className = `annotation ${extraClasses}`.trim());
   }
 
   bindAnnotation = (annotation, elements) => {

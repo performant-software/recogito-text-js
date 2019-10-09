@@ -27,7 +27,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.highlighter = new Highlighter(this.props.contentEl);
+    this.highlighter = new Highlighter(this.props.contentEl, this.props.formatter);
     this.selectionHandler = new SelectionHandler(this.props.contentEl, this.highlighter);
     this.selectionHandler.on('select', this.handleSelect);
   }

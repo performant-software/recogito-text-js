@@ -39,6 +39,7 @@ class Recogito {
         contentEl={content}
         containerEl={wrapper} 
         readOnly={config.readOnly}
+        formatter={config.formatter}
         onAnnotationCreated={this.handleAnnotationCreated} 
         onAnnotationUpdated={this.handleAnnotationUpdated} 
         onAnnotationDeleted={this.handleAnnotationDeleted} />,

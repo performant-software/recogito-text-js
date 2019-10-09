@@ -44,8 +44,21 @@ __Note: this example is work in progress. The API will change!__
     (function() {
       // Intialize Recogito
       var r = Recogito.init({
-        content: 'content', // ID of the content <pre> to attach to
-        readOnly: false     // Set to true for read-only display of annotations (default = false)
+
+        // REQUIRED id of the content <pre> to attach to
+        content: 'content',
+
+        // OPTIONAL 'true' for read-only display of annotations (default = false)
+        readOnly: false,
+
+        // OPTIONAL a function that allows you to create
+        // your own CSS class based on annotation contents.
+        // By default, all annotation SPANs have the CSS 
+        // class 'annotation'. Classes added via the formatter
+        // will be appended.
+        formatter: function(annotation) {
+          return 'my-class';
+        }
       });
 
       r.loadAnnotations('annotations.w3c.json');
