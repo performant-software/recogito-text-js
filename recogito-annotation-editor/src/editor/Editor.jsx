@@ -66,32 +66,34 @@ export default class Editor extends Component {
   setPosition = () => {
     // Container element offset
     const { offsetLeft, offsetTop, clientHeight } = this.props.containerEl;
+    const { scrollX, scrollY } = window;
 
     // Re-set orientation class
     this._ref.className = 'r6o-editor';
 
     // Default orientation
-    const { x, y, height } = this.props.bounds; 
-    this._ref.style.top = `${y + height + window.scrollY - offsetLeft}px`;
-    this._ref.style.left = `${x + window.scrollX - offsetTop}px`;
+    const { x, y, height, top } = this.props.bounds; 
+    this._ref.style.top = `${y + height + scrollY - offsetLeft}px`;
+    this._ref.style.left = `${x + scrollX - offsetTop}px`;
 
     const defaultOrientation = this._ref.getBoundingClientRect();
 
     if (defaultOrientation.right > window.innerWidth) {
       // Default bounds clipped - flip horizontally
       this._ref.classList.add('align-right');
-      this._ref.style.left = `${this.props.bounds.right - defaultOrientation.width + window.scrollX - offsetLeft}px`;
+      this._ref.style.left = `${this.props.bounds.right - defaultOrientation.width + scrollX - offsetLeft}px`;
     }
 
-    // TODO figure this out...
-    /*
     if (defaultOrientation.bottom > window.innerHeight) {
       // Flip vertically
+      const annotationTop = top + scrollY; // Annotation top relative to parents
+      const containerBounds = this.props.containerEl.getBoundingClientRect();
+      const containerHeight = containerBounds.height + containerBounds.top + scrollY;
+      
       this._ref.classList.add('align-bottom');
       this._ref.style.top = 'auto';
-      this._ref.style.bottom = `${clientHeight - this.props.bounds.top - offsetTop + window.scrollY}px`;
+      this._ref.style.bottom = `${containerHeight - annotationTop}px`;
     }
-    */
   }
 
   /** Handles an update to one of the sections/annotation bodies **/
