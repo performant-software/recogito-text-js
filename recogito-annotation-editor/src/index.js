@@ -70,6 +70,13 @@ class Recogito {
     this._app.current.addAnnotation(new WebAnnotation(annotation));
   }
 
+  /**
+   * Removes the given JSON-LD WebAnnotation from the annotation layer.
+   */
+  removeAnnotation = annotation => {
+    this._app.current.removeAnnotation(new WebAnnotation(annotation));
+  }
+
   /** 
    * Loads JSON-LD WebAnnotations from the given URL.
    */

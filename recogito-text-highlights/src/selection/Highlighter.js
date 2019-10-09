@@ -1,4 +1,4 @@
-import TextAnnotation from '../annotation/WebAnnotation';
+import WebAnnotation from '../annotation/WebAnnotation';
 
 const TEXT = 3; // HTML DOM node type for text nodes
 
@@ -42,16 +42,34 @@ export default class Highlighter {
     this.bindAnnotation(annotation, spans);
   }
 
-  addOrUpdateAnnotation = (annotation, maybePrevious) => {
-    // TODO just a hack for now, until we figure out how to handle IDs in the new system
+  _findAnnotationSpans = annotation => {
+    // TODO index annotation to make this faster
     const allAnnotationSpans = document.querySelectorAll('.annotation');
-    const spansForThisAnnotation = maybePrevious ? Array.prototype.slice.call(allAnnotationSpans)
-      .filter(span => span.annotation === maybePrevious) : [];
+    return Array.prototype.slice.call(allAnnotationSpans)
+      .filter(span => span.annotation.isEqual(annotation));
+  }
 
-    if (spansForThisAnnotation.length > 0) {
-      spansForThisAnnotation.forEach(span => span.annotation = annotation);
+  addOrUpdateAnnotation = (annotation, maybePrevious) => {
+    // TODO index annotation to make this faster
+    const spans = maybePrevious ? this._findAnnotationSpans(maybePrevious) : [];
+    if (spans.length > 0) {
+      spans.forEach(span => span.annotation = annotation);
     } else {
       this._addAnnotation(annotation);
+    }
+  }
+
+  removeAnnotation = annotation => {
+    const spans = this._findAnnotationSpans(annotation);
+    if (spans) {
+      spans.forEach(span => {
+        // Unwrap annotation SPAN
+        const parent = span.parentNode;
+        parent.insertBefore(document.createTextNode(span.textContent), span);
+        parent.removeChild(span);
+      });
+
+      this.el.normalize();
     }
   }
 

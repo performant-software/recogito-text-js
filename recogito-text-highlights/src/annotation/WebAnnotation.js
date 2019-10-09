@@ -9,6 +9,11 @@ export default class WebAnnotation {
     return new WebAnnotation(Object.assign({}, this._annotation));
   }
 
+  /** An equality check based on the underlying object **/
+  isEqual(other) {
+    return this._annotation === other._annotation;
+  }
+
   /*************************************/ 
   /* Getters to forward properties of  */
   /* the underlying annotation         */

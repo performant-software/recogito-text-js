@@ -71,6 +71,14 @@ export default class App extends Component {
     this.highlighter.addOrUpdateAnnotation(annotation);
   }
 
+  removeAnnotation = annotation => {
+    this.highlighter.removeAnnotation(annotation);
+
+    // If the editor is currently open on this annotation, close it
+    if (annotation.isEqual(this.state.selectedAnnotation))
+      this.setState({ showEditor: false });
+  }
+
   setAnnotations = annotations => {
     this.highlighter.init(annotations);
   }
