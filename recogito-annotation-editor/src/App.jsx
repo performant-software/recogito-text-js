@@ -52,16 +52,15 @@ export default class App extends Component {
     this.selectionHandler.clearSelection();
   }
 
-  /** TODO proper & explicit separation between CREATE and UPDATE **/
-  handleUpdateAnnotation = (annotation, previous) => {
+  /** Common handler for annotation CREATE or UPDATE **/
+  handleCreateOrUpdate = method => (annotation, previous) => {
+    // Clear the annotation layer
     this.selectionHandler.clearSelection();
     this.highlighter.addOrUpdateAnnotation(annotation, previous);
     this._clearState();
 
-    if (previous.id) // ugly hack - temporary only
-      this.props.onAnnotationUpdated(annotation, previous);
-    else 
-      this.props.onAnnotationCreated(annotation);
+    // Call CREATE or UPDATE handler
+    this.props[method](annotation, previous);
   }
 
   /******************/               
@@ -79,7 +78,8 @@ export default class App extends Component {
         bounds={this.state.selectionBounds}
         containerEl={this.props.containerEl}
         annotation={this.state.selectedAnnotation}
-        onUpdateAnnotation={this.handleUpdateAnnotation}
+        onAnnotationCreated={this.handleCreateOrUpdate('onAnnotationCreated')}
+        onAnnotationUpdated={this.handleCreateOrUpdate('onAnnotationUpdated')}
         onCancel={this.handleCancel}>
       </Editor>
     );

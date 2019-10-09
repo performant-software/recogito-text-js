@@ -108,9 +108,18 @@ export default class Editor extends Component {
 
   /** Handles OK button **/
   handleOk = () => {
-    const updated = this.props.annotation.clone();
-    updated.bodies = this.state.sections.map(s => s.current);
-    this.props.onUpdateAnnotation(updated, this.props.annotation);
+    // props.annotation is either a selection (if it was created from scratch
+    // just now) or an annotation (if it existed already and was opened for 
+    // editing)
+    if (this.props.annotation.isSelection) {
+      const annotation = this.props.annotation.toAnnotation();
+      annotation.bodies = this.state.sections.map(s => s.current);
+      this.props.onAnnotationCreated(annotation);
+    } else {
+      const updated = this.props.annotation.clone();
+      updated.bodies = this.state.sections.map(s => s.current);
+      this.props.onAnnotationUpdated(updated, this.props.annotation);  
+    }
   }
 
   /**

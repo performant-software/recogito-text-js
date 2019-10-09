@@ -1,4 +1,4 @@
-import WebAnnotation from "../annotation/WebAnnotation";
+import Selection from './Selection';
 
 export const trimRange = range => {
   let quote = range.toString();
@@ -27,7 +27,7 @@ export const trimRange = range => {
   return range;
 }
 
-export const rangeToAnnotationStub = (range, containerEl) => {
+export const rangeToSelection = (range, containerEl) => {
   const rangeBefore = document.createRange();
 
   // A helper range from the start of the contentNode to the start of the selection
@@ -37,21 +37,13 @@ export const rangeToAnnotationStub = (range, containerEl) => {
   const quote = range.toString();
   const start = rangeBefore.toString().length;
 
-  return new WebAnnotation({ 
-    '@context': 'http://www.w3.org/ns/anno.jsonld',
-    'type': 'Annotation',
-    'body': [{
-      'type': 'TextualBody'
-    }],
-    'target': {
-      'selector': [{
-        'type': 'TextQuoteSelector',
-        'exact': quote
-      }, {
-        'type': 'TextPositionSelector',
-        'start': start,
-        'end': start + quote.length
-      }]
-    }
-  });
+  return new Selection([{
+    type: 'TextQuoteSelector',
+    exact: quote
+  }, {
+    type: 'TextPositionSelector',
+    start: start,
+    end: start + quote.length
+  }]);
+
 };

@@ -1,4 +1,4 @@
-import { trimRange, rangeToAnnotationStub } from './SelectionUtils';
+import { trimRange, rangeToSelection } from './SelectionUtils';
 import EventEmitter from 'tiny-emitter';
 
 export default class SelectionHandler extends EventEmitter {
@@ -32,7 +32,7 @@ export default class SelectionHandler extends EventEmitter {
       }
     } else {
       const selectedRange = trimRange(selection.getRangeAt(0));
-      const stub = rangeToAnnotationStub(selectedRange, this.el);
+      const stub = rangeToSelection(selectedRange, this.el);
 
       const clientRect = selectedRange.getBoundingClientRect();
 
