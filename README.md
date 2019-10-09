@@ -19,7 +19,7 @@ with just a few lines of JavaScript.
 ```html
 <body>
   <!-- The text content we want to annotate -->
-  <pre id="content" class="plaintext">My text to annotate.</pre>
+  <pre id="content">My text to annotate.</pre>
 
   <!-- Initialize Recogito and load a bunch of annotations -->
   <script type="text/javascript">
