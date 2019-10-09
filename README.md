@@ -1,4 +1,4 @@
-# RecogitoJS (Working Title)
+# RecogitoJS
 
 __RecogitoJS__ is an experiment to extract the annotation functionality
 of [Recogito](https://recogito.pelagios.org) to an independent, client-only 
@@ -31,31 +31,27 @@ To build the minified bundle, run `npm run build`.
 ## Using RecogitoJS
 
 At the moment, __RecogitoJS__ works only on plaintext content, contained 
-in a single `<pre>` tag. The example below shows how to make a text 
-annotate-able with a few lines of JavaScript.
-
-__Note: this example is work in progress. The API will change!__
+in a single `<pre>` tag. The example below shows how to make text annotate-able 
+with just a few lines of JavaScript.
 
 ```html
 <body>
+  <!-- The text content we want to annotate -->
   <pre id="content" class="plaintext">My text to annotate.</pre>
 
+  <!-- Initialize Recogito and load a bunch of annotations -->
   <script type="text/javascript">
     (function() {
-      // Intialize Recogito
-      var r = Recogito.init({
 
-        // REQUIRED id of the content <pre> to attach to
+      var r = Recogito.init({
+        // REQUIRED - id of the element to make annotate-able
         content: 'content',
 
-        // OPTIONAL 'true' for read-only display of annotations (default = false)
+        // OPTIONAL - 'true' for read-only display (default = false)
         readOnly: false,
 
-        // OPTIONAL a function that allows you to create
-        // your own CSS class based on annotation contents.
-        // By default, all annotation SPANs have the CSS 
-        // class 'annotation'. Classes added via the formatter
-        // will be appended.
+        // OPTIONAL - a function that allows you to add your
+        // your own CSS class names based on annotation characteristics.
         formatter: function(annotation) {
           return 'my-class';
         }
@@ -63,46 +59,21 @@ __Note: this example is work in progress. The API will change!__
 
       r.loadAnnotations('annotations.w3c.json');
 
-      // Just an example - not functional yet 
+      // Add event handlers using .on  
       r.on('createAnnotation', function(annotation) {
         // Do something
       });
+
     })();
   </script>
 </body>
 ```
 
-### Instance Methods
-
-#### loadAnnotations(url)
-Loads annotations from a JSON-LD source. (Returns a promise.)
-- `url` - the URL to HTTP GET the annotations from
-
-#### on(event, callback) 
-Subscribe to an event
-- `event` - the name of the event
-- `callback` - the function to call when the event is emitted
-
-#### off(event[, callback])
-Unsubscribe from an event. No callback unsubscribes all event
-handlers.
-- `event` - the name of the event to unsubscribe from
-- `callback` - the function used when binding to the event
-
-### Events
-
-#### createAnnotation(annotation)
-Fired when a new annotation is created
-- `annotation` - the W3C WebAnnotation stub
-
-#### updateAnnotation(annotation, previous)
-Fired when an existing annotation is updated
-- `annotation` - the updated W3C WebAnnotation
-- `previous` - the previous annotation state, before the update happend
+The full API documentation is on the [Wiki](wiki).
 
 ### Annotation Format
 
-Annotations are encoded in JSON-LD, according to the
+RecogitoJS supports annotations in JSON-LD, according to the
 [W3C Web Annotation model](https://www.w3.org/TR/annotation-model/).
 
 ```json
@@ -127,17 +98,6 @@ Annotations are encoded in JSON-LD, according to the
   }
 }
 ```
-
-### Storing Annotations
-
-__RecogitoJS__ is a client-only library. That means it handles the
-user interaction in the browser only. Storage of annotations on a server
-backend is beyond scope. Instead, you can use the JavaScript API to 
-implement your own backend storage code. 
-
-Splitting out the [Recogito](https://github.com/pelagios/recogito2)
-annotation store into a separate project and/or providing a standard
-storage connector would be neat as a future project.
 
 ## License
 
