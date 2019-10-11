@@ -13,8 +13,8 @@
           "exact": "Troy"
         }, {
           "type": "TextPositionSelector",
-          "start": 106,
-          "end": 110
+          "start": 124,
+          "end": 128
         }]
       }
     }, {
@@ -31,8 +31,8 @@
           "exact": "death in battle"
         }, {
           "type": "TextPositionSelector",
-          "start": 634,
-          "end": 649
+          "start": 646,
+          "end": 661
         }]
       }
     }, {
@@ -49,8 +49,8 @@
           "exact": "Ithaca"
         }, {
           "type": "TextPositionSelector",
-          "start": 954,
-          "end": 960
+          "start": 963,
+          "end": 970
         }]
       }
     }
