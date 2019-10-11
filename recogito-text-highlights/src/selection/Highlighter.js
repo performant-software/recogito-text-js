@@ -51,7 +51,10 @@ export default class Highlighter {
 
   addOrUpdateAnnotation = (annotation, maybePrevious) => {
     // TODO index annotation to make this faster
-    const spans = maybePrevious ? this._findAnnotationSpans(maybePrevious) : [];
+    const annoSpans = this._findAnnotationSpans(annotation);
+    const prevSpans = maybePrevious ? this._findAnnotationSpans(maybePrevious) : [];
+    const spans = annoSpans.concat(prevSpans);
+
     if (spans.length > 0) {
       spans.forEach(span => span.annotation = annotation);
     } else {
