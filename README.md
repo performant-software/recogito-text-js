@@ -13,7 +13,7 @@ __This project is just getting started. To make it happen, we need your help. Ge
 ## Using RecogitoJS
 
 The example below shows how to make text annotate-able with just a few lines of JavaScript.
-The full API documentation is on the [Wiki](../../wiki).
+The full API documentation is on the [Wiki](../../wiki/Developer-Documentation).
 
 ```html
 <body>
