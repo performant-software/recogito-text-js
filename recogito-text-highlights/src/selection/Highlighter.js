@@ -10,23 +10,8 @@ export default class Highlighter {
   }
 
   init = annotations => {
-    // Even if there's only one text element, browsers may split them up 
-    // into multiple nodes
-    const textNodes = 
-      // Need to convert NodeList to plain array, so we can reduce
-      Array.prototype.slice.call(this.el.childNodes).reduce((nodes, n) => {
-        const startOffset = nodes.length > 0 ? nodes[nodes.length - 1].start : 0;
-        const charLength = n.textContent.length;
-
-        const props = { 
-          node: n, 
-          start: startOffset, 
-          end: startOffset + charLength 
-        };
-
-        return [...nodes, props];
-      }, []);
-
+    // TODO - there are several performance optimzations that are not yet ported 
+    // across from Recogito
     annotations.forEach(annotation => this._addAnnotation(annotation));
   }
 
