@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Emitter from 'tiny-emitter';
 import WebAnnotation from 'recogito-text-highlights/annotation/WebAnnotation';
+import { deflateHTML } from 'recogito-text-highlights/dom/DomUtils';
 import App from './App';
 
 /**
@@ -19,10 +20,12 @@ class Recogito {
     // Event handling via tiny-emitter
     this._emitter = new Emitter();
 
-    // <pre> content is wrapped in a DIV, and the application 
-    // container is attached as a sibling. This way the content and
-    // editor popup share the same CSS position reference frame
-    const content = document.getElementById(config.content);
+    // Content is wrapped in a container DIV, and the application 
+    // DIV (which contains the editor popup) is attached as a sibling. This 
+    // way the content and editor share the same CSS position reference frame.
+    const content = config.mode === 'pre' ? 
+      document.getElementById(config.content) :
+      deflateHTML(document.getElementById(config.content));
 
     const wrapper = document.createElement('DIV');
     wrapper.style.position = 'relative';
