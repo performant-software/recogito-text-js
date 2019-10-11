@@ -98,7 +98,7 @@ RecogitoJS supports annotations in JSON-LD, according to the
 
 ## Next Steps
 
-This project is just gettings started. Ultimately, we'd like to port the full
+This project is just getting started. Ultimately, we'd like to port the full
 range of features from Recogito to RecogitoJS. For now, however, the following 
 things are highest up on the wishlist: 
 
