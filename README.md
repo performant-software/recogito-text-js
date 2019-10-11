@@ -12,9 +12,8 @@ __This project is just getting started. To make it happen, we need your help. Ge
 
 ## Using RecogitoJS
 
-At the moment, __RecogitoJS__ works only on plaintext content, contained 
-in a single `<pre>` tag. The example below shows how to make text annotate-able 
-with just a few lines of JavaScript.
+The example below shows how to make text annotate-able with just a few lines of JavaScript.
+The full API documentation is on the [Wiki](../../wiki).
 
 ```html
 <body>
@@ -50,8 +49,6 @@ with just a few lines of JavaScript.
   </script>
 </body>
 ```
-
-The full API documentation is on the [Wiki](../../wiki).
 
 ## Developer Information
 
