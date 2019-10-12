@@ -23,9 +23,13 @@ class Recogito {
     // Content is wrapped in a container DIV, and the application 
     // DIV (which contains the editor popup) is attached as a sibling. This 
     // way the content and editor share the same CSS position reference frame.
-    const content = config.mode === 'pre' ? 
-      document.getElementById(config.content) :
-      deflateHTML(document.getElementById(config.content));
+    let content = (config.content.nodeType) ? 
+      config.content : document.getElementById(config.content);
+
+    // Unless this is preformatted text, remove multi spaces and 
+    // empty text node, so that HTML char offsets == browser offsets.
+    if (config.mode !== 'pre') 
+      content = deflateHTML(content);
 
     const wrapper = document.createElement('DIV');
     wrapper.style.position = 'relative';
