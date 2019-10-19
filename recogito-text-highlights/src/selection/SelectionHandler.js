@@ -10,6 +10,41 @@ export default class SelectionHandler extends EventEmitter {
     this.highlighter = highlighter;
     element.addEventListener('mousedown', this._onMouseDown);
     element.addEventListener('mouseup', this._onMouseUp);
+
+    // TODO clean up - move touch handling into a separat function
+    let touchTimeout;
+    let lastTouchEvent;
+
+    const onTouchStart = evt => {
+      if (!touchTimeout) {
+        lastTouchEvent = evt;
+        touchTimeout = setTimeout(executeTouchSelect, 1000);
+      }
+    }
+
+    const executeTouchSelect = () => {
+      if (lastTouchEvent) {
+        this._onMouseUp(lastTouchEvent);
+        touchTimeout = null;
+        lastTouchEvent = null;
+      }
+    };
+
+    const resetTouch = evt => {
+      if (touchTimeout) {
+        clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(executeTouchSelect, 1500);
+      }
+    }
+
+    element.addEventListener('touchstart', onTouchStart);
+    document.addEventListener('selectionchange', resetTouch);
+  }
+
+  _
+
+  _onTouchend = evt => {
+
   }
 
   _onMouseDown = evt => {
