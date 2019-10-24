@@ -1,5 +1,7 @@
-import { trimRange, rangeToSelection } from './SelectionUtils';
+import { trimRange, rangeToSelection, enableTouch } from './SelectionUtils';
 import EventEmitter from 'tiny-emitter';
+
+const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 export default class SelectionHandler extends EventEmitter {
 
@@ -11,37 +13,9 @@ export default class SelectionHandler extends EventEmitter {
     element.addEventListener('mousedown', this._onMouseDown);
     element.addEventListener('mouseup', this._onMouseUp);
 
-    // TODO clean up - move touch handling into a separat function
-    let touchTimeout;
-    let lastTouchEvent;
-
-    const onTouchStart = evt => {
-      if (!touchTimeout) {
-        lastTouchEvent = evt;
-        touchTimeout = setTimeout(executeTouchSelect, 1000);
-      }
-    }
-
-    const executeTouchSelect = () => {
-      if (lastTouchEvent) {
-        this._onMouseUp(lastTouchEvent);
-        touchTimeout = null;
-        lastTouchEvent = null;
-      }
-    };
-
-    const resetTouch = evt => {
-      if (touchTimeout) {
-        clearTimeout(touchTimeout);
-        touchTimeout = setTimeout(executeTouchSelect, 1500);
-      }
-    }
-
-    element.addEventListener('touchstart', onTouchStart);
-    document.addEventListener('selectionchange', resetTouch);
+    if (IS_TOUCH)
+      enableTouch(element, this._onMouseUp); 
   }
-
-  _
 
   _onTouchend = evt => {
 

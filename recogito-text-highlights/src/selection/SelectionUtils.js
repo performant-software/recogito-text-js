@@ -25,7 +25,7 @@ export const trimRange = range => {
     range.setEnd(range.endContainer, range.endOffset - trailingSpaces);
 
   return range;
-}
+};
 
 export const rangeToSelection = (range, containerEl) => {
   const rangeBefore = document.createRange();
@@ -47,3 +47,33 @@ export const rangeToSelection = (range, containerEl) => {
   }]);
 
 };
+
+export const enableTouch = (element, selectHandler) => {
+  let touchTimeout;
+  let lastTouchEvent;
+
+  const onTouchStart = evt => {
+    if (!touchTimeout) {
+      lastTouchEvent = evt;
+      touchTimeout = setTimeout(executeTouchSelect, 1000);
+    }
+  }
+
+  const executeTouchSelect = () => {
+    if (lastTouchEvent) {
+      selectHandler(lastTouchEvent);
+      touchTimeout = null;
+      lastTouchEvent = null;
+    }
+  };
+
+  const resetTouch = evt => {
+    if (touchTimeout) {
+      clearTimeout(touchTimeout);
+      touchTimeout = setTimeout(executeTouchSelect, 1500);
+    }
+  }
+
+  element.addEventListener('touchstart', onTouchStart);
+  document.addEventListener('selectionchange', resetTouch);  
+}
