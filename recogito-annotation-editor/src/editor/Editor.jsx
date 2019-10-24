@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import CommentSection from './sections/comment/CommentSection';
+import SemanticTagSection from './sections/semanticTag/SemanticTagSection';
 
 /** Maps WebAnno body types to section implementation classes **/
 const SECTIONS = {
-  TextualBody: CommentSection
+  TextualBody: CommentSection,
+  SpecificResource: SemanticTagSection
 }
 
 /** 
@@ -148,6 +150,8 @@ export default class Editor extends Component {
   }
 
   render() {
+    console.log(this.props.annotation);
+    
     return this.props.open && (
       <div
         ref={el => this._ref = el}
@@ -156,7 +160,10 @@ export default class Editor extends Component {
         <div className="arrow" />
         <div className="inner">
           <div>
+            <>
+            <SemanticTagSection quote={this.props.annotation.quote} />
             {  this.renderSections() }
+            </>
           </div>
           { this.props.readOnly ? (
             <div className="footer">

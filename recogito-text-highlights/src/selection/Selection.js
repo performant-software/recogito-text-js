@@ -36,6 +36,15 @@ export default class Selection {
     return this._stub.body;
   }
 
+  selector = type => {
+    return this._stub.target.selector.find(t => t.type === type);
+  }
+
+  /** Shorthand for the 'exact' field of the TextQuoteSelector **/
+  get quote() {
+    return this.selector('TextQuoteSelector').exact;
+  }
+
   /*******************************************/ 
   /* Selection-specific properties & methods */
   /*******************************************/
