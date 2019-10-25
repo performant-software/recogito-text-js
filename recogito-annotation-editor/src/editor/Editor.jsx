@@ -160,10 +160,7 @@ export default class Editor extends Component {
         <div className="arrow" />
         <div className="inner">
           <div>
-            <>
-            <SemanticTagSection quote={this.props.annotation.quote} />
             {  this.renderSections() }
-            </>
           </div>
           { this.props.readOnly ? (
             <div className="footer">
