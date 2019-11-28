@@ -2,6 +2,8 @@ import WebAnnotation from '../annotation/WebAnnotation';
 
 const TEXT = 3; // HTML DOM node type for text nodes
 
+const uniqueItems = items => Array.from(new Set(items))
+
 export default class Highlighter {
 
   constructor(element, formatter) {
@@ -10,7 +12,7 @@ export default class Highlighter {
   }
 
   init = annotations => {
-    // TODO - there are several performance optimzations that are not yet ported 
+    // TODO - there are several performance optimzations that are not yet ported
     // across from Recogito
     annotations.forEach(annotation => this._addAnnotation(annotation));
   }
@@ -21,7 +23,7 @@ export default class Highlighter {
     const range = document.createRange();
     range.setStart(domStart.node, domStart.offset);
     range.setEnd(domEnd.node, domEnd.offset);
-    
+
     const spans = this.wrapRange(range);
     this.applyStyles(annotation, spans);
     this.bindAnnotation(annotation, spans);
@@ -38,10 +40,12 @@ export default class Highlighter {
     // TODO index annotation to make this faster
     const annoSpans = this._findAnnotationSpans(annotation);
     const prevSpans = maybePrevious ? this._findAnnotationSpans(maybePrevious) : [];
-    const spans = annoSpans.concat(prevSpans);
+    const spans = uniqueItems(annoSpans.concat(prevSpans));
 
     if (spans.length > 0) {
-      spans.forEach(span => span.annotation = annotation);
+      // naive approach
+      this._unwrapHighlightings(spans);
+      this._addAnnotation(annotation);
     } else {
       this._addAnnotation(annotation);
     }
@@ -50,14 +54,16 @@ export default class Highlighter {
   removeAnnotation = annotation => {
     const spans = this._findAnnotationSpans(annotation);
     if (spans) {
-      spans.forEach(span => {
-        // Unwrap annotation SPAN
-        const parent = span.parentNode;
-        parent.insertBefore(document.createTextNode(span.textContent), span);
-        parent.removeChild(span);
-      });
-
+      this._unwrapHighlightings(spans)
       this.el.normalize();
+    }
+  }
+
+  _unwrapHighlightings(highlightSpans) {
+    for (const span of highlightSpans) {
+      const parent = span.parentNode;
+      parent.insertBefore(document.createTextNode(span.textContent), span);
+      parent.removeChild(span);
     }
   }
 
