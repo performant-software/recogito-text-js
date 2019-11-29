@@ -9,9 +9,16 @@ export default class WebAnnotation {
     return new WebAnnotation(Object.assign({}, this._annotation));
   }
 
-  /** An equality check based on the underlying object **/
+  /** An equality check based on the underlying object or (if given) ID **/
   isEqual(other) {
-    return other ? this._annotation === other._annotation : false;
+    if (!other) {
+      return false;
+    } else if (this._annotation === other._annotation) {
+      return true;
+    } else if (!this._annotation.id || !other._annotation.id) {
+      return false;
+    }
+    return this._annotation.id === other._annotation.id
   }
 
   /*************************************/ 
