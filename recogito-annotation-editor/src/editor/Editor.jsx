@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CommentSection from './sections/comment/CommentSection';
 import SemanticTagSection from './sections/semanticTag/SemanticTagSection';
+import TypeSelector from './controls/TypeSelector';
 
 /** Maps WebAnno body types to section implementation classes **/
 const SECTIONS = {
