@@ -160,6 +160,7 @@ export default class Editor extends Component {
 
         <div className="arrow" />
         <div className="inner">
+          <TypeSelector />
           <div>
             {  this.renderSections() }
           </div>

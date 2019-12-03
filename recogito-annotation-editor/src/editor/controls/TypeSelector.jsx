@@ -12,15 +12,15 @@ const TypeSelector = props => {
   return (
     <div className="type-selector">
       <div className="type place">
-        <FontAwesomeIcon icon={faMapMarkerAlt} /> Place
+        <FontAwesomeIcon className="icon" icon={faMapMarkerAlt} /> Place
       </div>
 
       <div className="type person">
-        <FontAwesomeIcon icon={faUser} /> Person
+        <FontAwesomeIcon className="icon" icon={faUser} /> Person
       </div>
 
       <div className="type event">
-        <FontAwesomeIcon icon={faStar} /> Event
+        <FontAwesomeIcon className="icon" icon={faStar} /> Event
       </div>
     </div>
   )
