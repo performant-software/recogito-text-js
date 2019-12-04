@@ -1,6 +1,7 @@
 @import "sections/comment/comment";
 @import "sections/semanticTag/semanticTag";
 @import "sections/textentry";
+@import "controls/tagControl";
 @import "controls/typeSelector";
 
 .r6o-editor {
@@ -9,6 +10,7 @@
   margin-top:18px;
   margin-left:-14px;
   width:400px;
+  color:$standard-type;
 
   .arrow {
     position:absolute;
@@ -40,7 +42,7 @@
     }
 
     .r6o-section {
-      border-bottom:1px solid $lightgrey-border;
+      border-bottom:1px solid $lightgrey-border-darker;
     }
   }
 

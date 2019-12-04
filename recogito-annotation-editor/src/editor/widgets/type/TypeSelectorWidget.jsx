@@ -7,19 +7,23 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 /** 
  * The basic Place/Person/Event selector from original Recogito
  */
-const TypeSelector = props => {
+const TypeSelectorWidget = props => {
+
+  const onSelect = type => event => {
+    props.onSelect && props.onSelect(type);
+  }
 
   return (
     <div className="type-selector">
-      <div className="type place">
+      <div className="type place" onClick={onSelect('PLACE')}>
         <FontAwesomeIcon className="icon" icon={faMapMarkerAlt} /> Place
       </div>
 
-      <div className="type person">
+      <div className="type person" onClick={onSelect('PERSON')}>
         <FontAwesomeIcon className="icon" icon={faUser} /> Person
       </div>
 
-      <div className="type event">
+      <div className="type event" onClick={onSelect('EVENT')}>
         <FontAwesomeIcon className="icon" icon={faStar} /> Event
       </div>
     </div>
@@ -27,4 +31,4 @@ const TypeSelector = props => {
 
 }
 
-export default TypeSelector;
+export default TypeSelectorWidget;

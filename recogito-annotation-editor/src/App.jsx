@@ -55,9 +55,10 @@ export default class App extends Component {
   /** Common handler for annotation CREATE or UPDATE **/
   handleCreateOrUpdate = method => (annotation, previous) => {
     // Clear the annotation layer
+    this._clearState();
+    
     this.selectionHandler.clearSelection();
     this.highlighter.addOrUpdateAnnotation(annotation, previous);
-    this._clearState();
 
     // Call CREATE or UPDATE handler
     this.props[method](annotation, previous);

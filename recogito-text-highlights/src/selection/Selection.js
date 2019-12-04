@@ -10,13 +10,22 @@ export default class Selection {
   constructor(selectors) {
     this._stub = {
       type: 'Selection',
-      body: [{
-        type: 'TextualBody'
-      }],
+      body: [],
       target: {
         selector: selectors
       }
     }
+  }
+
+  /** Creates a copy of this selection **/
+  clone = opt_props => {
+    const selectors = this._stub.target.selector.map(s => ({ ...s })); // Clone selectors
+    const cloned = new Selection(selectors);
+
+    if (opt_props)
+      cloned._stub = { ...cloned._stub, ...opt_props };
+
+    return cloned;
   }
 
   get type() {
