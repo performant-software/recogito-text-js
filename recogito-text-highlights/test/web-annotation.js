@@ -3,7 +3,6 @@ import WebAnnotation from "../src/annotation/WebAnnotation";
 
 const fixtureAnnotation = {
   "@context": "http://www.w3.org/ns/anno.jsonld",
-  id: "https://www.example.com/recogito-js-example/foo",
   type: "Annotation",
   body: [
     {
