@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { setPosition } from './editorUtils.js';
+import setPosition from './setPosition';
 import TagWidget  from './widgets/tags/TagWidget';
 import TypeSelectorWidget from './widgets/type/TypeSelectorWidget';
 import CommentWidget from './widgets/comments/CommentWidget';
@@ -13,14 +13,14 @@ import CommentWidget from './widgets/comments/CommentWidget';
  */
 const Editor = props => {
   
-  // The current state of the edited annotation (vs. original)
+  // The current state of the edited annotation vs. original
   const [ currentAnnotation, setCurrentAnnotation ] = useState();
   const [ currentReply, setCurrentReply ] = useState('');
 
   // Reference to the DOM element, so we can set position
   const element = useRef();
 
-  // Re-render: set (derived) annotation state & editor position
+  // Re-render: set derived annotation state & position the editor
   useEffect(() => {
     setCurrentAnnotation(props.annotation);
     setCurrentReply('');
@@ -29,10 +29,9 @@ const Editor = props => {
       setPosition(props.containerEl, element.current, props.bounds);
   }, [ props.annotation ]);
 
-  // Append the body to the current annotation state
   const onAppendBody = body => setCurrentAnnotation(
     currentAnnotation.clone({ 
-      body: [ ...currentAnnotation.bodies, body] 
+      body: [ ...currentAnnotation.bodies, body ] 
     })
   );
 
@@ -49,15 +48,15 @@ const Editor = props => {
   );
 
   const onOk = _ => {
-    // If there is a non-empty reply, append this as a comment body
+    // If there is a non-empty reply, append it as a comment body
     const updated = currentReply.trim() ?
       currentAnnotation.clone({
-        body: [ ...currentAnnotation.bodies, { type: 'TextualBody', value: currentReply }] 
-      }) : currentAnnotation;      
+        body: [ ...currentAnnotation.bodies, { type: 'TextualBody', value: currentReply.trim() } ] 
+      }) : currentAnnotation;
 
-    // Current annotation is either a selection (if it was created from scratch
-    // just now) or an annotation (if it existed already and was opened for 
-    // editing)
+    // Current annotation is either a selection (if it was created from 
+    // scratch just now) or an annotation (if it existed already and was
+    // opened for editing)
     if (updated.isSelection)
       props.onAnnotationCreated(updated.toAnnotation());
     else
@@ -85,6 +84,7 @@ const Editor = props => {
           onAddTag={onAppendBody}
           onRemoveTag={onRemoveBody}
         />
+        
         { props.readOnly ? (
           <div className="footer">
             <button

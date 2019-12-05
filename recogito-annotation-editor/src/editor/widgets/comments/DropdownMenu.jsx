@@ -1,20 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import useClickOutside from '../../useClickOutside';
 
 const DropdownMenu = props => {
 
   const ref = useRef();
 
-  const onClickOutside = _ => {
-    if (ref.current && !ref.current.contains(event.target))
-      props.onClickOutside();
-  }
-
-  useEffect(() => {
-    document.addEventListener('mousedown', onClickOutside);
-
-    return () =>
-      document.removeEventListener('mousedown', onClickOutside);
-  });
+  // Custom hook that notifies when clicked outside this component
+  useClickOutside(ref, () => props.onClickOutside());
 
   return (
     <ul ref={ref} className="comment-dropdown-menu">

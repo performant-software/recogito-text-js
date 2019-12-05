@@ -9,7 +9,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
  */
 const TypeSelectorWidget = props => {
 
-  const onSelect = type => event => {
+  const onSelect = type => _ => {
     props.onSelect && props.onSelect(type);
   }
 

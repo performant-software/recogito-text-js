@@ -3,13 +3,12 @@ import Comment from './Comment';
 import TextEntryField from './TextEntryField';
 
 /** 
- * This widget renders a list of comment bodies, followed by a
- * 'reply' field.
+ * Renders a list of comment bodies, followed by a 'reply' field.
  */
 const CommentWidget = props => {
 
   const commentBodies = props.annotation ? 
-    props.annotation.bodies.filter(b => // No purpose or 'commenting'
+    props.annotation.bodies.filter(b => // No purpose or 'commenting', 'replying'
       !b.hasOwnProperty('purpose') || b.purpose === 'commenting' || b.purpose === 'replying'
     ) : [];
 
@@ -20,7 +19,7 @@ const CommentWidget = props => {
           key={idx} 
           readOnly={props.readOnly} 
           body={body} 
-          onChange={props.onUpdateComment}
+          onUpdate={props.onUpdateComment}
           onDelete={props.onDeleteComment}
           onOk={props.onOk} />
       )}

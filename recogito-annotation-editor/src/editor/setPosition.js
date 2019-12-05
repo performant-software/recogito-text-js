@@ -1,5 +1,5 @@
 /** Sets the editor position and determines a proper orientation **/
-export const setPosition = (containerEl, editorEl, annotationBounds) => {
+const setPosition = (containerEl, editorEl, annotationBounds) => {
   // Container element offset
   const { offsetLeft, offsetTop } = containerEl;
   const { scrollX, scrollY } = window;
@@ -31,3 +31,5 @@ export const setPosition = (containerEl, editorEl, annotationBounds) => {
     editorEl.style.bottom = `${containerHeight - annotationTop}px`;
   }
 }
+
+export default setPosition;

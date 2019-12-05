@@ -3,32 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CSSTransition } from 'react-transition-group';
 
-/** 
- * The basic freetext tag control from original Recogito
- */
+/** The basic freetext tag control from original Recogito **/
 const TagWidget = props => {
+
   const [ showDelete, setShowDelete ] = useState(false);
   const [ newTag, setNewTag ] = useState('');
 
+  // Every body with a 'tagging' purpose is considered a tag
   const tagBodies = props.annotation ? 
     props.annotation.bodies.filter(b => b.purpose === 'tagging') : [];
 
   const toggle = tag => _ => {
-    if (showDelete === tag)
+    if (showDelete === tag) // Removes delete button
       setShowDelete(false);
     else 
-      setShowDelete(tag);
+      setShowDelete(tag); // Sets delete button on a different tag
   }
 
-  const handleDelete = tag => evt => { 
+  const onDelete = tag => evt => { 
     evt.stopPropagation();
     props.onRemoveTag(tag);
   }
 
-  const handleKeyDown = evt => {
+  const onKeyDown = evt => {
     if (evt.which === 13) { // Enter
       props.onAddTag({ type: 'TextualBody', purpose: 'tagging', value: newTag.trim() });
-      setNewTag('');
+      setNewTag(''); // Clear the input
     }
   }
 
@@ -39,8 +39,8 @@ const TagWidget = props => {
           <li key={tag.value} onClick={toggle(tag.value)}>
             <span className="label">{tag.value}</span>
 
-            <CSSTransition in={showDelete === tag.value} timeout={100} classNames="delete">
-              <span className="delete-wrapper" onClick={handleDelete(tag)}>
+            <CSSTransition in={showDelete === tag.value} timeout={200} classNames="delete">
+              <span className="delete-wrapper" onClick={onDelete(tag)}>
                 <span className="delete">
                   <FontAwesomeIcon className="icon" icon={faTrash} />
                 </span>
@@ -49,11 +49,12 @@ const TagWidget = props => {
           </li>
         )}
       </ul>
+
       <input 
         type="text" 
         value={newTag} 
         onChange={evt => setNewTag(evt.target.value)} 
-        onKeyDown={handleKeyDown}
+        onKeyDown={onKeyDown}
         placeholder="Add tag..." />
     </div>
   )

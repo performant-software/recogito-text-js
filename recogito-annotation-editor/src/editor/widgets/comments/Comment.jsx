@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import DropdownMenu from './DropdownMenu';
 import TextEntryField from './TextEntryField';
 
-/**
- * A single comment inside the CommentWidget.
- */
+/** A single comment inside the CommentWidget **/
 const Comment = props => {
 
   const [ isEditable, setIsEditable ] = useState(false);
   const [ isMenuVisible, setIsMenuVisible ] = useState(false);
 
-  const onEdit = _ => {
+  const onMakeEditable = _ => {
     setIsEditable(true);
     setIsMenuVisible(false);
   }
@@ -20,8 +18,8 @@ const Comment = props => {
     setIsMenuVisible(false); 
   }
 
-  const onChange = evt => {
-    props.onChange(props.body, { ...props.body, value: evt.target.value });
+  const onUpdateComment = evt => {
+    props.onUpdate(props.body, { ...props.body, value: evt.target.value });
   }
 
   return props.readOnly ? (
@@ -33,7 +31,7 @@ const Comment = props => {
       <TextEntryField 
         editable={isEditable}
         content={props.body.value} 
-        onChange={onChange} 
+        onChange={onUpdateComment} 
         onOk={props.onOk} 
       />
 
@@ -43,7 +41,7 @@ const Comment = props => {
 
       { isMenuVisible && 
         <DropdownMenu 
-          onEdit={onEdit} 
+          onEdit={onMakeEditable} 
           onDelete={onDelete} 
           onClickOutside={() => setIsMenuVisible(false)} /> 
       }
