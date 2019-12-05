@@ -6,6 +6,14 @@
       "body": [{
         "type": "TextualBody",
         "value": "This is a comment"
+      }, {
+        "type": "TextualBody",
+        "value": "A Tag",
+        "purpose": "tagging"
+      }, {
+        "type": "TextualBody",
+        "value": "Another Tag",
+        "purpose": "tagging"
       }],
       "target": {
         "selector": [{
