@@ -81,6 +81,10 @@ RecogitoJS supports annotations in JSON-LD, according to the
   "body": [{
     "type": "TextualBody",
     "value": "This is a comment."
+  },{
+    "type": "TextualBody",
+    "value": "MyTag",
+    "purpose": "tagging"
   }],
   "target": {
     "source": "http://example.com/my-page",
