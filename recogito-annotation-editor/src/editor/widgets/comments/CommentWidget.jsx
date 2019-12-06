@@ -24,11 +24,12 @@ const CommentWidget = props => {
           onOk={props.onOk} />
       )}
 
-      { !props.readOnly && 
+      { !props.readOnly && props.annotation &&
         <div className="r6o-section comment editable">
           <TextEntryField
             content={props.currentReply}
             editable={true}
+            placeholder={commentBodies.length > 0 ? 'Add a reply...' : 'Add a comment...'}
             onChange={props.onUpdateReply}
             onOk={() => props.onOk()}
           /> 

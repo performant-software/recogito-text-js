@@ -28,7 +28,7 @@ export default class TextEntryField extends Component {
         innerRef={this.onRender}
         className="r6o-editable-text" 
         html={this.props.content}
-        data-placeholder="Add a comment..."
+        data-placeholder={this.props.placeholder || "Add a comment..."}
         disabled={!this.props.editable}
         onChange={evt => this.props.onChange(evt)}
         onKeyDown={this.onKeyDown} />
