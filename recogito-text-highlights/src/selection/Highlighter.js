@@ -14,7 +14,10 @@ export default class Highlighter {
   init = annotations => {
     // TODO - there are several performance optimzations that are not yet ported
     // across from Recogito
-    annotations.forEach(annotation => this._addAnnotation(annotation));
+    annotations 
+      // Discard all annotations without a TextPositionSelector
+      .filter(annotation => annotation.selector('TextPositionSelector'))
+      .forEach(annotation => this._addAnnotation(annotation));
   }
 
   _addAnnotation = annotation => {

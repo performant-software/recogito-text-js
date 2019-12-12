@@ -34,6 +34,10 @@ export default class WebAnnotation {
     return this._annotation.type;
   }
 
+  get motivation() {
+    return this._annotation.motivation;
+  }
+
   get body() {
     return this._annotation.body;
   }
@@ -53,13 +57,20 @@ export default class WebAnnotation {
     this._annotation.body = bodies;
   }
 
+  /** Same as .target, but guaranteed to return an array **/
+  get targets() {
+    return (Array.isArray(this._annotation.target)) ?
+      this._annotation.target : [ this._annotation.target ];
+  }
+  
   /*****************************************/ 
   /* Various access helpers and shorthands */
   /*****************************************/
 
   /** Selector of the given type **/
   selector = type => {
-    return this._annotation.target.selector.find(t => t.type === type);
+    return this._annotation.target.selector && 
+      this._annotation.target.selector.find(t => t.type === type);
   }
 
   /** Shorthand for the 'exact' field of the TextQuoteSelector **/

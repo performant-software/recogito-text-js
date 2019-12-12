@@ -61,5 +61,20 @@
           "end": 970
         }]
       }
+    }, { 
+      "@context": "http://www.w3.org/ns/anno.jsonld",
+      "id": "#9ba844a7-e8ec-4127-ad12-1f7f16a240c6",
+      "type": "Annotation",
+      "motivation": "linking",
+      "body": [{
+        "type": "TextualBody",
+        "value": "isRelatedTo",
+        "purpose": "tagging"
+      }],
+      "target": [{
+        "id": "#ce0ed291-766b-4763-8e91-90ce1d04e706"
+      }, {
+        "id": "#447d4bea-08dc-4bd0-ae51-31f5ed7a95a0"
+      }]
     }
   ]

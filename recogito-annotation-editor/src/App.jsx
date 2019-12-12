@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Highlighter from 'recogito-text-highlights/selection/Highlighter';
 import SelectionHandler from 'recogito-text-highlights/selection/SelectionHandler';
+import RelationsLayer from 'recogito-relations/RelationsLayer';
 import Editor from './editor/Editor';
 
 import 'themes/theme.scss';
@@ -30,6 +31,7 @@ export default class App extends Component {
     this.highlighter = new Highlighter(this.props.contentEl, this.props.formatter);
     this.selectionHandler = new SelectionHandler(this.props.contentEl, this.highlighter);
     this.selectionHandler.on('select', this.handleSelect);
+    this.relationsLayer = new RelationsLayer(this.props.contentEl);
   }
 
   /** Selection on the text **/
@@ -83,6 +85,7 @@ export default class App extends Component {
 
   setAnnotations = annotations => {
     this.highlighter.init(annotations);
+    this.relationsLayer.init(annotations);
   }
 
   render() {

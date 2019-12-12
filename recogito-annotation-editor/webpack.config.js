@@ -27,7 +27,8 @@ module.exports = {
     extensions: ['.js', '.jsx'],
     alias: {
       'themes': resolveAppPath('themes/default'),
-      'recogito-text-highlights': resolveAppPath('../recogito-text-highlights/src')
+      'recogito-text-highlights': resolveAppPath('../recogito-text-highlights/src'),
+      'recogito-relations': resolveAppPath('../recogito-relations/src')
     }
   },
   module: {
