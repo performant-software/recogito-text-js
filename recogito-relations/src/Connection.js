@@ -1,4 +1,5 @@
 import Bounds from './Bounds';
+import TagHandle from './TagHandle';
 import CONST from './SVGConst';
 
 /** 
@@ -15,8 +16,19 @@ export default class Connection {
 
   constructor(contentEl, svgEl, nodeOrAnnotation) {
 
+    this.svgEl = svgEl;
+
+    // SVG elements
+    this.path = document.createElementNS(CONST.NAMESPACE, 'path'),
+    this.startDot = document.createElementNS(CONST.NAMESPACE, 'circle'),
+    this.endDot = document.createElementNS(CONST.NAMESPACE, 'circle'),
+
+    svgEl.appendChild(this.path);
+    svgEl.appendChild(this.startDot);
+    svgEl.appendChild(this.endDot);
+
     // TODO conditional init from annotation or interactive drawing
-    
+
     const props = this.initFromAnnotation(contentEl, svgEl, nodeOrAnnotation);
 
     // 'Descriptive' instance properties
@@ -28,17 +40,10 @@ export default class Connection {
 
     this.currentEnd = props.currentEnd;
 
+    this.handle = props.handle;
+
     this.floating = props.floating;
     this.stored = props.stored;
-
-    // SVG elements
-    this.path = document.createElementNS(CONST.NAMESPACE, 'path'),
-    this.startDot = document.createElementNS(CONST.NAMESPACE, 'circle'),
-    this.endDot = document.createElementNS(CONST.NAMESPACE, 'circle'),
-
-    svgEl.appendChild(this.path);
-    svgEl.appendChild(this.startDot);
-    svgEl.appendChild(this.endDot);
 
     this.redraw();
   }
@@ -46,6 +51,7 @@ export default class Connection {
     /** Initializes a fixed connection from a relation **/
   initFromAnnotation = function(contentEl, svgEl, annotation) {
     const [ fromId, toId ] = annotation.target.map(t => t.id);
+    const relation = annotation.bodies[0].value; // Temporary hack
 
     const fromNode = getNode(contentEl, fromId);
     const fromBounds = new Bounds(fromNode.elements, svgEl);
@@ -55,10 +61,12 @@ export default class Connection {
 
     const currentEnd = toNode;
 
+    const handle = new TagHandle(relation, svgEl);
+
     const floating = false;
     const stored = true;
 
-    return { fromNode, fromBounds, toNode, toBounds, currentEnd, floating, stored };
+    return { fromNode, fromBounds, toNode, toBounds, currentEnd, handle, floating, stored };
   }
 
   /**
@@ -174,7 +182,7 @@ export default class Connection {
       this.currentMidXY = [ midX, midY ];
 
       if (this.handle)
-        this.handle.setPosition(currentMidXY, orientation);
+        this.handle.setPosition(this.currentMidXY, orientation);
     }
   }
 
