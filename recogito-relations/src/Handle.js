@@ -9,7 +9,7 @@ const escapeHtml = unsafe => {
     .replace(/'/g, '&#039;');
 }
 
-export default class TagHandle {
+export default class Handle {
 
   constructor(label, svg) {
     this.svg = svg;

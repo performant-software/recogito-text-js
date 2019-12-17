@@ -1,21 +1,14 @@
 import Bounds from './Bounds';
-import TagHandle from './TagHandle';
+import Handle from './Handle';
 import CONST from './SVGConst';
+import { getNodeById } from './RelationUtils'
 
-/** 
- * Fetches annotation & DOM elements based on the given
- * annotation ID.
+/**
+ * The connecting line between two annotation highlights.
  */
-const getNode = function(contentEl, annotationId) {
-  const elements = contentEl.querySelectorAll(`*[data-id="${annotationId}"]`);
-  return (elements.length > 0) ? 
-    { annotation: elements[0].annotation, elements: Array.from(elements) } : null;
-};
-
 export default class Connection {
 
   constructor(contentEl, svgEl, nodeOrAnnotation) {
-
     this.svgEl = svgEl;
 
     // SVG elements
@@ -27,9 +20,12 @@ export default class Connection {
     svgEl.appendChild(this.startDot);
     svgEl.appendChild(this.endDot);
 
-    // TODO conditional init from annotation or interactive drawing
-
-    const props = this.initFromAnnotation(contentEl, svgEl, nodeOrAnnotation);
+    // Connections are initialized either from a relation annotation 
+    // (when loading), or as a 'floating' relation, attached to a start 
+    // node (when drawing a new one). 
+    const props = nodeOrAnnotation.type === 'Annotation' ?
+     this.initFromAnnotation(contentEl, svgEl, nodeOrAnnotation) : 
+     this.initFromStartNode(svgEl, nodeOrAnnotation);
 
     // 'Descriptive' instance properties
     this.fromNode = props.fromNode;
@@ -42,63 +38,64 @@ export default class Connection {
 
     this.handle = props.handle;
 
+    // A floating connection is one that's not yet attached to 
+    // an end node.
     this.floating = props.floating;
-    this.stored = props.stored;
 
     this.redraw();
   }
 
-    /** Initializes a fixed connection from a relation **/
+  /** Initializes a fixed connection from an annotation **/
   initFromAnnotation = function(contentEl, svgEl, annotation) {
     const [ fromId, toId ] = annotation.target.map(t => t.id);
     const relation = annotation.bodies[0].value; // Temporary hack
 
-    const fromNode = getNode(contentEl, fromId);
+    const fromNode = getNodeById(contentEl, fromId);
     const fromBounds = new Bounds(fromNode.elements, svgEl);
 
-    const toNode = getNode(contentEl, toId);
+    const toNode = getNodeById(contentEl, toId);
     const toBounds = new Bounds(toNode.elements, svgEl);
 
     const currentEnd = toNode;
 
-    const handle = new TagHandle(relation, svgEl);
+    const handle = new Handle(relation, svgEl);
 
-    const floating = false;
-    const stored = true;
-
-    return { fromNode, fromBounds, toNode, toBounds, currentEnd, handle, floating, stored };
+    return { fromNode, fromBounds, toNode, toBounds, currentEnd, handle, floating: false };
   }
 
-  /**
-   * A Floating connection is not fixed to a target node.
-   */
-  get isFloating() {
-    return this.floating;
-  }
-
-  /** End XY coordinates **/
-  get endXY() {
-    return (this.currentEnd instanceof Array) ?
-      this.currentEnd : 
-        (this.fromBounds.top > this.toBounds.top) ?
-          this.toBounds.bottomHandleXY : this.toBounds.topHandleXY;
+  /** Initializes a floating connection from a start node **/
+  initFromStartNode = function(svgEl, fromNode) {
+    const fromBounds = new Bounds(fromNode.elements, svgEl);
+    return { fromNode, fromBounds, floating: true };
   }
 
   /** 
    * Fixes the end of the connection to the current end node,
-   * if it is currently floating.
+   * turning a floating connection into a non-floating one.
    */
-  fix = function() {
+  unfloat = function() {
     if (this.currentEnd.elements)
       this.floating = false;
   }
 
-  get isStored() {
-    return this.stored;
+  /** Moves the end of a (floating!) connection to the given [x,y] or node **/
+  dragTo = function(xyOrNode) {
+    if (this.floating) {
+      this.currentEnd = xyOrNode;
+      if (xyOrNode.elements) {
+        this.toNode = xyOrNode;
+        this.toBounds = new Bounds(xyOrNode.elements, this.svgEl);
+      }
+    }
   }
 
-  set isStored(stored) {
-    this.stored = stored;
+  destroy = () => {
+    this.svgEl.removeChild(this.path);
+    this.svgEl.removeChild(this.startDot);
+    this.svgEl.removeChild(this.endDot);
+
+    if (this.handle) 
+      this.handle.destroy();
   }
 
   /** Redraws this connection **/
@@ -186,5 +183,26 @@ export default class Connection {
     }
   }
 
-};
+  /** Getter/setter shorthands **/
+
+  get isFloating() {
+    return this.floating;
+  }
+
+  get startAnnotation() {
+    return this.fromNode.annotation;
+  }
+
+  get endAnnotation() {
+    return this.toNode.annotation;
+  }
+
+  get endXY() {
+    return (this.currentEnd instanceof Array) ?
+      this.currentEnd : 
+        (this.fromBounds.top > this.toBounds.top) ?
+          this.toBounds.bottomHandleXY : this.toBounds.topHandleXY;
+  }
+
+}
 

@@ -10,6 +10,9 @@ export default class SelectionHandler extends EventEmitter {
 
     this.el = element;
     this.highlighter = highlighter;
+
+    this.isEnabled = true;
+
     element.addEventListener('mousedown', this._onMouseDown);
     element.addEventListener('mouseup', this._onMouseUp);
 
@@ -17,8 +20,12 @@ export default class SelectionHandler extends EventEmitter {
       enableTouch(element, this._onMouseUp); 
   }
 
-  _onTouchend = evt => {
+  get enabled() {
+    return this.isEnabled;
+  }
 
+  set enabled(enabled) {
+    this.isEnabled = enabled;
   }
 
   _onMouseDown = evt => {
@@ -26,34 +33,36 @@ export default class SelectionHandler extends EventEmitter {
   }
 
   _onMouseUp = evt => {
-    const selection = getSelection();
+    if (this.isEnabled) {
+      const selection = getSelection();
 
-    if (selection.isCollapsed) {
-      const annotationSpan = evt.target.closest('.annotation');
-      if (annotationSpan) {
-        this.emit('select', { 
-          selection: this.highlighter.getAnnotationsAt(annotationSpan)[0],
-          clientRect: annotationSpan.getBoundingClientRect() 
-        });
+      if (selection.isCollapsed) {
+        const annotationSpan = evt.target.closest('.annotation');
+        if (annotationSpan) {
+          this.emit('select', { 
+            selection: this.highlighter.getAnnotationsAt(annotationSpan)[0],
+            clientRect: annotationSpan.getBoundingClientRect() 
+          });
+        } else {
+          // De-select
+          this.emit('select', {});
+        }
       } else {
-        // De-select
-        this.emit('select', {});
+        const selectedRange = trimRange(selection.getRangeAt(0));
+        const stub = rangeToSelection(selectedRange, this.el);
+
+        const clientRect = selectedRange.getBoundingClientRect();
+
+        const spans = this.highlighter.wrapRange(selectedRange);
+        spans.forEach(span => span.className = 'selection');
+
+        this._clearNativeSelection();
+
+        this.emit('select', {
+          selection: stub,
+          clientRect
+        });
       }
-    } else {
-      const selectedRange = trimRange(selection.getRangeAt(0));
-      const stub = rangeToSelection(selectedRange, this.el);
-
-      const clientRect = selectedRange.getBoundingClientRect();
-
-      const spans = this.highlighter.wrapRange(selectedRange);
-      spans.forEach(span => span.className = 'selection');
-
-      this._clearNativeSelection();
-
-      this.emit('select', {
-        selection: stub,
-        clientRect
-      });
     }
   }
 

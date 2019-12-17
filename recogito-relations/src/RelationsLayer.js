@@ -1,4 +1,5 @@
 import Connection from './Connection';
+import DrawingTool from './editing/DrawingTool';
 import CONST from './SVGConst';
 
 import './RelationsLayer.scss';
@@ -13,6 +14,13 @@ export default class RelationsLayer {
     this.svg = document.createElementNS(CONST.NAMESPACE, 'svg');
     this.svg.classList.add('r6o-relations-layer');
     this.contentEl.appendChild(this.svg);
+
+    this.drawingTool = new DrawingTool(contentEl, this.svg);
+
+    // For testing only
+    this.drawingTool.on('createConnection', conn => {
+      console.log('new connection', conn);
+    })
   }
 
   init = annotations => {
@@ -42,21 +50,8 @@ export default class RelationsLayer {
   }
 
   set drawingEnabled(enabled) {
-    if (this.editor) {
-      editor.enabled = enabled;
-
-      if (!enabled) {
-        this.connections.forEach(function(conn) {
-          conn.stopEditing();
-        });
-      }
-    }
-  }
-
-  recomputeAll = function() {
-    this.connections.forEach(function(conn) {
-      conn.recompute();
-    });
+    if (this.drawingTool)
+      this.drawingTool.enabled = enabled;
   }
 
 }

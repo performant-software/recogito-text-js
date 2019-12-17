@@ -1,6 +1,10 @@
 // Standard 'black' (well, not quite) type
 $line-color:#3f3f3f;
 
+.r6o-drawing {
+  cursor:none;
+}
+
 .r6o-relations-layer {
   position:absolute;
   top:0;
@@ -46,6 +50,12 @@ $line-color:#3f3f3f;
       font-size:10px;
     }
 
+  }
+
+  .hover {
+    stroke:rgba($line-color, 0.9);
+    stroke-width:1.4;
+    fill:transparent;
   }
 
 }

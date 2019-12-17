@@ -88,6 +88,17 @@ export default class App extends Component {
     this.relationsLayer.init(annotations);
   }
 
+  setMode = mode => {
+    if (mode === 'RELATIONS') {
+      this.setState({ showEditor: false });
+      this.selectionHandler.enabled = false;
+      this.relationsLayer.drawingEnabled = true;
+    } else {
+      this.selectionHandler.enabled = true;
+      this.relationsLayer.drawingEnabled = false;
+    }
+  }
+
   render() {
     return (
       <Editor

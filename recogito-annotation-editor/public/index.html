@@ -32,6 +32,7 @@
       <button id="add-annotation">Add Annotation</button>
       <button id="update-annotation">Update Annotation</button>
       <button id="remove-annotation">Remove Annotation</button>
+      <!-- button id="toggle-mode">MODE: ANNOTATION</button -->
     </div>
 
     <div id="content" class="plaintext">
@@ -92,7 +93,7 @@
           console.log('updated', previous, 'with', annotation);
         });
 
-        // Wire the Add/Remove buttons
+        // Wire the Add/Update/Remove buttons
         document.getElementById('add-annotation').addEventListener('click', function() {
           r.addAnnotation(myAnnotation);
         });
@@ -116,9 +117,28 @@
             }
           });
         });
+
         document.getElementById('remove-annotation').addEventListener('click', function() {
           r.removeAnnotation(myAnnotation);
         });
+
+        /* Switch annotation mode (annotation/relationships)
+        var annotationMode = 'ANNOTATION'; // or 'RELATIONS'
+
+        var toggleModeBtn = document.getElementById('toggle-mode');
+        toggleModeBtn.addEventListener('click', function() {
+          if (annotationMode === 'ANNOTATION') {
+            toggleModeBtn.innerHTML = 'MODE: RELATIONS';
+            annotationMode = 'RELATIONS';
+          } else  {
+            toggleModeBtn.innerHTML = 'MODE: ANNOTATION';
+            annotationMode = 'ANNOTATION';
+          }
+
+          r.setMode(annotationMode);
+        });
+        */
+       
       })();
     </script>
   </body>

@@ -93,6 +93,14 @@ class Recogito {
     return annotations;
   });
 
+  /**
+   * Activates annotation or relationship drawing mode. 
+   * @param mode a string, either ANNOTATION (default) or RELATIONS
+   */
+  setMode = mode => {
+    this._app.current.setMode(mode);
+  }
+
   /** 
    * Adds an event handler.
    */
