@@ -23,6 +23,9 @@ export default class RelationsLayer extends EventEmitter {
     // Forward events
     this.drawingTool.on('createRelation', relation => this.emit('createRelation', relation));
     this.drawingTool.on('cancelDrawing', () => this.emit('cancelDrawing'));
+
+    // Redraw on window resize
+    window.addEventListener('resize', this.recomputeAll);
   }
 
   /** Shorthand **/
@@ -79,25 +82,27 @@ export default class RelationsLayer extends EventEmitter {
     }
   }
 
-  show = function() {
+  show = () =>
     this.svg.style.display = 'inital';
-  }
 
-  hide = function() {
+  hide = () => {
     this.drawingEnabled = false;
     this.svg.style.display = 'none';
   }
 
-  startDrawing = function() {
+  startDrawing = () =>
     this.drawingTool.enabled = true;
-  }
 
-  stopDrawing = function() {
+  stopDrawing = () =>
     this.drawingTool.enabled = false;
-  }
 
-  resetDrawing = function() {
+  resetDrawing = () =>
     this.drawingTool.reset();
+
+  recomputeAll = () => {
+    this.connections.forEach(conn => {
+      conn.recompute();
+    });
   }
 
 }

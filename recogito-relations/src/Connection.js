@@ -196,6 +196,20 @@ export default class Connection extends EventEmitter {
     }
   }
 
+  /**
+   * Redraws this connection, and additionally forces a recompute of
+   * the start and end coordinates. This is only needed if the position
+   * of the annotation highlights changes, e.g. after a window resize.
+   */
+  recompute = () => {
+    this.fromBounds.recompute();
+
+    if (this.currentEnd.elements)
+      this.toBounds.recompute();
+
+    this.redraw();
+  }
+
   /** 
    * Returns true if the given relation matches this connection,
    * meaning that this connection has the same start and end point
