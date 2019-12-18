@@ -71,7 +71,7 @@ export default class RelationsLayer extends EventEmitter {
   }
 
   removeRelation = relation => {
-    const toRemove = this.connections.find(c => c.annotation.isEqual(annotation));
+    const toRemove = this.connections.find(c => c.matchesRelation(relation));
 
     if (toRemove) {
       this.connections = this.connections.filter(c => c !== toRemove);
