@@ -11,7 +11,7 @@ const getContent = relation => {
 }
 
 /** 
- * A React relationship editor GUI component. Note that this
+ * A React component for the relationship editor popup. Note that this
  * component is NOT wired into the RelationsLayer directly, but needs
  * to be used separately by the implementing application. We
  * still keep it in the /recogito-relations folder though, so that

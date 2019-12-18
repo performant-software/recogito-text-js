@@ -32,7 +32,6 @@ export default class RelationsLayer extends EventEmitter {
     return c
   }
 
-
   init = annotations => {
     // Filter annotations for 'relationship annotation' shape first
     this.connections = annotations.filter(annotation => {

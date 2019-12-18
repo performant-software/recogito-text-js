@@ -73,8 +73,7 @@ export default class Handle extends EventEmitter {
     this.arrow.setAttribute('d', createArrow());
   }
 
-  destroy = () => {
+  destroy = () =>
     this.svg.removeChild(this.g);
-  }
 
 };
