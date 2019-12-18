@@ -5,6 +5,13 @@ $line-color:#3f3f3f;
   cursor:none;
 }
 
+.r6o-relations-layer.readonly {
+
+  .handle rect {
+    pointer-events:none;
+  }
+}
+
 .r6o-relations-layer {
   position:absolute;
   top:0;

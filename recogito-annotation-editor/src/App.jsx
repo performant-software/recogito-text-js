@@ -38,9 +38,11 @@ export default class App extends Component {
     this.selectionHandler.on('select', this.handleSelect);
 
     this.relationsLayer = new RelationsLayer(this.props.contentEl);
+    this.relationsLayer.readOnly = true; // Deactivate by default
+
     this.relationsLayer.on('createRelation', this.onEditRelation);
     this.relationsLayer.on('selectRelation', this.onEditRelation);
-    this.relationsLayer.on('cancelDrawing', this.onCancelRelation);
+    this.relationsLayer.on('cancelDrawing', this.closeRelationsEditor);
   }
 
   /**************************/  
@@ -137,11 +139,17 @@ export default class App extends Component {
   setMode = mode => {
     if (mode === 'RELATIONS') {
       this.setState({ showEditor: false });
+      
       this.selectionHandler.enabled = false;
+
+      this.relationsLayer.readOnly = false;
       this.relationsLayer.startDrawing();
     } else {
       this.setState({ showRelationEditor: false });
+      
       this.selectionHandler.enabled = true;
+
+      this.relationsLayer.readOnly = true;
       this.relationsLayer.stopDrawing();
     }
   }

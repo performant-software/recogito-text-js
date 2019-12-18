@@ -31,7 +31,10 @@ export default class RelationsLayer extends EventEmitter {
   /** Shorthand **/
   createConnection = annotation => {
     const c = new Connection(this.contentEl, this.svg, annotation);
+    
+    // Forward click event as selection, unless we're read-only
     c.on('click', relation => this.emit('selectRelation', relation));
+
     return c
   }
 
@@ -50,6 +53,12 @@ export default class RelationsLayer extends EventEmitter {
         return conns;
       }
     }, [])
+  }
+
+  recomputeAll = () => {
+    this.connections.forEach(conn => {
+      conn.recompute();
+    });
   }
   
   addOrUpdateRelation = (relation, maybePrevious) => {
@@ -99,10 +108,15 @@ export default class RelationsLayer extends EventEmitter {
   resetDrawing = () =>
     this.drawingTool.reset();
 
-  recomputeAll = () => {
-    this.connections.forEach(conn => {
-      conn.recompute();
-    });
+  get readOnly() {
+    this.svg.classList.contains('readonly');
+  }
+
+  set readOnly(readOnly) {
+    if (readOnly)
+      this.svg.classList.add('readonly');
+    else
+      this.svg.classList.remove('readonly');
   }
 
 }
