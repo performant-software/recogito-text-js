@@ -1,3 +1,4 @@
+import EventEmitter from 'tiny-emitter';
 import Bounds from './Bounds';
 import Handle from './Handle';
 import CONST from './SVGConst';
@@ -6,9 +7,11 @@ import { getNodeById } from './RelationUtils'
 /**
  * The connecting line between two annotation highlights.
  */
-export default class Connection {
+export default class Connection extends EventEmitter {
 
   constructor(contentEl, svgEl, nodeOrAnnotation) {
+    super();
+
     this.svgEl = svgEl;
 
     // SVG elements
@@ -27,6 +30,8 @@ export default class Connection {
      this.initFromAnnotation(contentEl, svgEl, nodeOrAnnotation) : 
      this.initFromStartNode(svgEl, nodeOrAnnotation);
 
+    this.annotation = props.annotation;
+    
     // 'Descriptive' instance properties
     this.fromNode = props.fromNode;
     this.fromBounds = props.fromBounds;
@@ -38,8 +43,7 @@ export default class Connection {
 
     this.handle = props.handle;
 
-    // A floating connection is one that's not yet attached to 
-    // an end node.
+    // A floating connection is not yet attached to an end node.
     this.floating = props.floating;
 
     this.redraw();
@@ -60,7 +64,16 @@ export default class Connection {
 
     const handle = new Handle(relation, svgEl);
 
-    return { fromNode, fromBounds, toNode, toBounds, currentEnd, handle, floating: false };
+    // RelationsLayer uses click as a selection event
+    handle.on('click', () => this.emit('click', {
+      annotation, 
+      from: fromNode.annotation,
+      to: toNode.annotation,
+      midX: this.currentMidXY[0], 
+      midY: this.currentMidXY[1]
+    }));
+
+    return { annotation, fromNode, fromBounds, toNode, toBounds, currentEnd, handle, floating: false };
   }
 
   /** Initializes a floating connection from a start node **/
@@ -183,6 +196,15 @@ export default class Connection {
     }
   }
 
+  /** 
+   * Returns true if the given relation matches this connection,
+   * meaning that this connection has the same start and end point
+   * as recorded in the relation.
+   */
+  matchesRelation = relation =>
+    relation.from.isEqual(this.fromNode.annotation) && 
+    relation.to.isEqual(this.toNode.annotation);
+
   /** Getter/setter shorthands **/
 
   get isFloating() {
@@ -202,6 +224,10 @@ export default class Connection {
       this.currentEnd : 
         (this.fromBounds.top > this.toBounds.top) ?
           this.toBounds.bottomHandleXY : this.toBounds.topHandleXY;
+  }
+
+  get midXY() {
+    return this.currentMidXY;
   }
 
 }

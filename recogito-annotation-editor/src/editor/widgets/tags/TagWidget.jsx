@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CSSTransition } from 'react-transition-group';
 
 /** The basic freetext tag control from original Recogito **/
@@ -42,7 +40,7 @@ const TagWidget = props => {
             <CSSTransition in={showDelete === tag.value} timeout={200} classNames="delete">
               <span className="delete-wrapper" onClick={onDelete(tag)}>
                 <span className="delete">
-                  <FontAwesomeIcon className="icon" icon={faTrash} />
+                  <span className="icon">{'\uf014'}</span>
                 </span>
               </span>
             </CSSTransition>

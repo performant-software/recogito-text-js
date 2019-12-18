@@ -1,12 +1,15 @@
 import Connection from './Connection';
-import DrawingTool from './editing/DrawingTool';
+import DrawingTool from './drawing/DrawingTool';
 import CONST from './SVGConst';
+import EventEmitter from 'tiny-emitter';
 
 import './RelationsLayer.scss';
 
-export default class RelationsLayer {
+export default class RelationsLayer extends EventEmitter {
 
   constructor(contentEl) {
+    super();
+
     this.connections = []; 
 
     this.contentEl = contentEl;
@@ -17,11 +20,18 @@ export default class RelationsLayer {
 
     this.drawingTool = new DrawingTool(contentEl, this.svg);
 
-    // For testing only
-    this.drawingTool.on('createConnection', conn => {
-      console.log('new connection', conn);
-    })
+    // Forward events
+    this.drawingTool.on('createRelation', relation => this.emit('createRelation', relation));
+    this.drawingTool.on('cancelDrawing', () => this.emit('cancelDrawing'));
   }
+
+  /** Shorthand **/
+  createConnection = annotation => {
+    const c = new Connection(this.contentEl, this.svg, annotation);
+    c.on('click', relation => this.emit('selectRelation', relation));
+    return c
+  }
+
 
   init = annotations => {
     // Filter annotations for 'relationship annotation' shape first
@@ -30,7 +40,7 @@ export default class RelationsLayer {
       return allTargetsHashIDs && annotation.motivation === 'linking';
     }).reduce((conns, annotation) => {
       try {
-        const c = new Connection(this.contentEl, this.svg, annotation);
+        const c = this.createConnection(annotation);
         return [ ...conns, c ];
       } catch (error) {
         console.log(error);
@@ -38,6 +48,36 @@ export default class RelationsLayer {
         return conns;
       }
     }, [])
+  }
+  
+  addOrUpdateRelation = (relation, maybePrevious) => {
+    const previous = maybePrevious ? 
+      this.connections.find(c => c.matchesRelation(relation)) : null;
+
+    if (previous) {
+      // Replace existing
+      this.connections = this.connections.map(connection => {
+        if (connection == previous) {
+          connection.destroy();
+          return this.createConnection(relation.annotation);
+        } else {
+          return connection;
+        }
+      });
+    } else {
+      // Add new
+      const c = this.createConnection(relation.annotation);
+      this.connections.push(c);
+    }
+  }
+
+  removeRelation = relation => {
+    const toRemove = this.connections.find(c => c.annotation.isEqual(annotation));
+
+    if (toRemove) {
+      this.connections = this.connections.filter(c => c !== toRemove);
+      toRemove.destroy();
+    }
   }
 
   show = function() {
@@ -49,9 +89,16 @@ export default class RelationsLayer {
     this.svg.style.display = 'none';
   }
 
-  set drawingEnabled(enabled) {
-    if (this.drawingTool)
-      this.drawingTool.enabled = enabled;
+  startDrawing = function() {
+    this.drawingTool.enabled = true;
+  }
+
+  stopDrawing = function() {
+    this.drawingTool.enabled = false;
+  }
+
+  resetDrawing = function() {
+    this.drawingTool.reset();
   }
 
 }

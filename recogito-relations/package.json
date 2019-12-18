@@ -9,6 +9,9 @@
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "react": "^16.12.0",
+    "react-contenteditable": "^3.3.3",
+    "react-dom": "^16.12.0",
     "tiny-emitter": "^2.1.0"
   }
 }

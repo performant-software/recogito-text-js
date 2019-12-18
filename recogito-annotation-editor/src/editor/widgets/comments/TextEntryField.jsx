@@ -30,7 +30,7 @@ export default class TextEntryField extends Component {
         html={this.props.content}
         data-placeholder={this.props.placeholder || "Add a comment..."}
         disabled={!this.props.editable}
-        onChange={evt => this.props.onChange(evt)}
+        onChange={this.props.onChange}
         onKeyDown={this.onKeyDown} />
     )
   }

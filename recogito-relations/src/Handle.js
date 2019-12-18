@@ -1,3 +1,4 @@
+import EventEmitter from 'tiny-emitter';
 import CONST from './SVGConst';
 
 const escapeHtml = unsafe => {
@@ -9,9 +10,11 @@ const escapeHtml = unsafe => {
     .replace(/'/g, '&#039;');
 }
 
-export default class Handle {
+export default class Handle extends EventEmitter {
 
   constructor(label, svg) {
+    super();
+
     this.svg = svg;
 
     this.g = document.createElementNS(CONST.NAMESPACE, 'g');
@@ -40,6 +43,8 @@ export default class Handle {
     this.rect.setAttribute('height',  Math.round(this.bounds.height));
 
     this.arrow.setAttribute('class', 'arrow');    
+
+    this.rect.addEventListener('click', () => this.emit('click'));
   }
 
   setPosition = (xy, orientation) => {

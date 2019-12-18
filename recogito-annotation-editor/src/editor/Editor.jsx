@@ -63,7 +63,7 @@ const Editor = props => {
       props.onAnnotationUpdated(updated, props.annotation);
   };
 
-  return props.open && (
+  return (
     <div ref={element} className="r6o-editor">
       <div className="arrow" />
       <div className="inner">

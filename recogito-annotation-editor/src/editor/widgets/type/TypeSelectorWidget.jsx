@@ -1,8 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 /** 
  * The basic Place/Person/Event selector from original Recogito
@@ -16,15 +12,15 @@ const TypeSelectorWidget = props => {
   return (
     <div className="type-selector">
       <div className="type place" onClick={onSelect('PLACE')}>
-        <FontAwesomeIcon className="icon" icon={faMapMarkerAlt} /> Place
+        <span className="icon">{'\uf041'}</span> Place
       </div>
 
       <div className="type person" onClick={onSelect('PERSON')}>
-        <FontAwesomeIcon className="icon" icon={faUser} /> Person
+        <span className="icon">{'\uf007'}</span> Person
       </div>
 
       <div className="type event" onClick={onSelect('EVENT')}>
-        <FontAwesomeIcon className="icon" icon={faStar} /> Event
+        <span className="icon">{'\uf005'}</span> Event
       </div>
     </div>
   )

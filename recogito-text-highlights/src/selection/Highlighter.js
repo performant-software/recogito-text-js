@@ -243,7 +243,7 @@ export default class Highlighter {
 
         sortByQuoteLength = function(annotations) {
           return annotations.sort(function(a, b) {
-            return new WebAnnotation(a).quote.length - new WebAnnotation(b).quote.length;
+            return a.quote.length - b.quote.length;
           });
         };
 

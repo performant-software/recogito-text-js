@@ -2,6 +2,7 @@ import Connection from '../Connection';
 import HoverEmphasis from './HoverEmphasis';
 import { getNodeForEvent } from '../RelationUtils';
 import EventEmitter from 'tiny-emitter';
+import WebAnnotation from 'recogito-text-highlights/annotation/WebAnnotation';
 
 /** 
  * Wraps an event handler for event delegation. This way, we 
@@ -91,10 +92,9 @@ export default class DrawingTool extends EventEmitter {
   }
 
   onKeyDown = evt => {
-    if (this.currentConnection && evt.which === 27) { // Escape
-      this.currentConnection.destroy();
-      this.currentConnection = null;
-      this.contentEl.classList.remove('r6o-drawing');
+    if (evt.which === 27) { // Escape
+      this.reset();
+      this.emit('cancelDrawing');
     }
   }
 
@@ -134,13 +134,28 @@ export default class DrawingTool extends EventEmitter {
   completeConnection = function() {
     this.currentConnection.unfloat();
 
+    this.contentEl.classList.remove('r6o-drawing');
+    
     const from = this.currentConnection.startAnnotation;
     const to = this.currentConnection.endAnnotation;
+    const [ midX, midY ] = this.currentConnection.midXY;
 
-    this.currentConnection = null;
-    this.contentEl.classList.remove('r6o-drawing');
+    const annotation = WebAnnotation.create({ 
+      target: [
+        { id: from.id },
+        { id: to.id }
+      ]
+    });
 
-    this.emit('createConnection', { from, to });
+    this.emit('createRelation', { annotation, from, to, midX, midY });
+  }
+
+  reset = () => {
+    if (this.currentConnection) {
+      this.currentConnection.destroy();
+      this.currentConnection = null;
+      this.contentEl.classList.remove('r6o-drawing');
+    }
   }
 
   render = () => {

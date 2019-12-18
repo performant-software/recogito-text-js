@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Highlighter from 'recogito-text-highlights/selection/Highlighter';
 import SelectionHandler from 'recogito-text-highlights/selection/SelectionHandler';
 import RelationsLayer from 'recogito-relations/RelationsLayer';
+import RelationEditor from 'recogito-relations/editor/RelationEditor';
 import Editor from './editor/Editor';
 
 import 'themes/theme.scss';
@@ -15,7 +16,10 @@ export default class App extends Component {
   state = {
     showEditor: false,
     selectionBounds: null,
-    selectedAnnotation: null
+    selectedAnnotation: null,
+
+    showRelationEditor: false,
+    selectedRelation: null
   }
 
   /** Helper **/
@@ -29,10 +33,19 @@ export default class App extends Component {
 
   componentDidMount() {
     this.highlighter = new Highlighter(this.props.contentEl, this.props.formatter);
+
     this.selectionHandler = new SelectionHandler(this.props.contentEl, this.highlighter);
     this.selectionHandler.on('select', this.handleSelect);
+
     this.relationsLayer = new RelationsLayer(this.props.contentEl);
+    this.relationsLayer.on('createRelation', this.onEditRelation);
+    this.relationsLayer.on('selectRelation', this.onEditRelation);
+    this.relationsLayer.on('cancelDrawing', this.onCancelRelation);
   }
+
+  /**************************/  
+  /* Annotation CRUD events */
+  /**************************/    
 
   /** Selection on the text **/
   handleSelect = evt => {
@@ -48,14 +61,8 @@ export default class App extends Component {
     }
   }
 
-  /** Cancel button on editor **/
-  handleCancel = () => {
-    this._clearState();
-    this.selectionHandler.clearSelection();
-  }
-
   /** Common handler for annotation CREATE or UPDATE **/
-  handleCreateOrUpdate = method => (annotation, previous) => {
+  onCreateOrUpdateAnnotation = method => (annotation, previous) => {
     // Clear the annotation layer
     this._clearState();
     
@@ -66,9 +73,48 @@ export default class App extends Component {
     this.props[method](annotation, previous);
   }
 
-  /******************/               
-  /*  External API  */
-  /******************/    
+  /** Cancel button on annotation editor **/
+  onCancelAnnotation = () => {
+    this._clearState();
+    this.selectionHandler.clearSelection();
+  }
+
+  /************************/  
+  /* Relation CRUD events */
+  /************************/  
+
+  // Shorthand
+  closeRelationsEditor = () => {
+    this.setState({ showRelationEditor: false });
+    this.relationsLayer.resetDrawing();
+  }
+
+  /**
+   * Selection on the relations layer: open an existing
+   * or newly created connection for editing.
+   */
+  onEditRelation = relation => {
+    this.setState({ 
+      showRelationEditor: true,
+      selectedRelation: relation
+    });
+  }
+
+  /** 'Ok' on the relation editor popup **/
+  onCreateOrUpdateRelation = (relation, previous) => {
+    this.relationsLayer.addOrUpdateRelation(relation, previous);
+    this.closeRelationsEditor();
+  }
+
+  /** 'Delete' on the relation editor popup **/
+  onDeleteRelation = relation => {
+    this.relationsLayer.removeRelation(relation);
+    this.closeRelationsEditor();
+  }
+
+  /****************/               
+  /* External API */
+  /****************/    
 
   addAnnotation = annotation => {
     this.highlighter.addOrUpdateAnnotation(annotation);
@@ -92,25 +138,39 @@ export default class App extends Component {
     if (mode === 'RELATIONS') {
       this.setState({ showEditor: false });
       this.selectionHandler.enabled = false;
-      this.relationsLayer.drawingEnabled = true;
+      this.relationsLayer.startDrawing();
     } else {
+      this.setState({ showRelationEditor: false });
       this.selectionHandler.enabled = true;
-      this.relationsLayer.drawingEnabled = false;
+      this.relationsLayer.stopDrawing();
     }
   }
 
   render() {
     return (
-      <Editor
-        open={this.state.showEditor}
-        readOnly={this.props.readOnly}
-        bounds={this.state.selectionBounds}
-        containerEl={this.props.containerEl}
-        annotation={this.state.selectedAnnotation}
-        onAnnotationCreated={this.handleCreateOrUpdate('onAnnotationCreated')}
-        onAnnotationUpdated={this.handleCreateOrUpdate('onAnnotationUpdated')}
-        onCancel={this.handleCancel}>
-      </Editor>
+      <>
+        { this.state.showEditor &&
+          <Editor
+            open={this.state.showEditor}
+            readOnly={this.props.readOnly}
+            bounds={this.state.selectionBounds}
+            containerEl={this.props.containerEl}
+            annotation={this.state.selectedAnnotation}
+            onAnnotationCreated={this.onCreateOrUpdateAnnotation('onAnnotationCreated')}
+            onAnnotationUpdated={this.onCreateOrUpdateAnnotation('onAnnotationUpdated')}
+            onCancel={this.onCancelAnnotation} 
+          />
+        }
+
+        { this.state.showRelationEditor && 
+          <RelationEditor 
+            relation={this.state.selectedRelation}
+            onRelationUpdated={this.onCreateOrUpdateRelation}
+            onRelationDeleted={this.onDeleteRelation}
+            onCancel={this.closeRelationsEditor}
+          /> 
+        }
+      </>
     );
   }  
 

@@ -4,6 +4,17 @@ export default class WebAnnotation {
     this._annotation = annotation;
   }
 
+  /** For convenience - creates an empty web annotation **/
+  static create = args => {
+    const stub = {
+      '@context': 'http://www.w3.org/ns/anno.jsonld',
+      'type': 'Annotation',
+      'body': []
+    };
+
+    return new WebAnnotation({ ...stub, ...args });
+  }
+
   /** Creates a copy of this annotation **/
   clone = opt_props => {
     return new WebAnnotation({ ...this._annotation, ...opt_props});

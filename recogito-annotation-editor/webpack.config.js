@@ -28,7 +28,8 @@ module.exports = {
     alias: {
       'themes': resolveAppPath('themes/default'),
       'recogito-text-highlights': resolveAppPath('../recogito-text-highlights/src'),
-      'recogito-relations': resolveAppPath('../recogito-relations/src')
+      'recogito-relations': resolveAppPath('../recogito-relations/src'),
+      'react': path.resolve('node_modules/react')
     }
   },
   module: {
