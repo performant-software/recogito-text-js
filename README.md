@@ -58,7 +58,7 @@ The plan is to organize the project into a number of sub-modules.
   library that handles text highlight rendering and mouse selection
 - __recogito-annotation-editor__ is a [React](https://reactjs.org/)
   project for the annotation editor popup window
-- __recogito-relations__ a port of Recogito's 
+- __recogito-relations__ is a port of Recogito's 
   [relationship annotation](https://recogito.pelagios.org/help/relations)
   functionality
 
