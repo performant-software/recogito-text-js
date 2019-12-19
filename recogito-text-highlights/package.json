@@ -34,6 +34,7 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
-    "tiny-emitter": "^2.1.0"
+    "tiny-emitter": "^2.1.0",
+    "uuid": "^3.3.3"
   }
 }

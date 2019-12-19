@@ -28,7 +28,7 @@ export const getNodeForEvent = function(evt) {
 
     // ALL spans for this annotation (not just the hovered one)
     const elements = document.querySelectorAll(`.annotation[data-id="${annotation.id}"]`);
-
+    
     return { annotation, elements: Array.from(elements) };    
   }
 }

@@ -3,6 +3,7 @@
   @include box-shadow(0, 1px, 14px, 0.4);
   @include rounded-corners(3px);
   transform:translate(-50%, -50%);
+  background-color:#fff;
 
   * {
     line-height:31px;

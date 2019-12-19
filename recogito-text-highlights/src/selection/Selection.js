@@ -1,4 +1,5 @@
 import WebAnnotation from '../annotation/WebAnnotation';
+import uuid from 'uuid/v1';
 
 /**
  * An "annotation in draft mode". Really the same
@@ -65,7 +66,8 @@ export default class Selection {
   toAnnotation = () => {
     const a = Object.assign({}, this._stub, {
       '@context': 'http://www.w3.org/ns/anno.jsonld',
-      'type': 'Annotation'
+      'type': 'Annotation',
+      'id': uuid()
     });
 
     return new WebAnnotation(a);
