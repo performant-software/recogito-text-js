@@ -57,10 +57,17 @@ const Editor = props => {
     // Current annotation is either a selection (if it was created from 
     // scratch just now) or an annotation (if it existed already and was
     // opened for editing)
-    if (updated.isSelection)
-      props.onAnnotationCreated(updated.toAnnotation());
-    else
-      props.onAnnotationUpdated(updated, props.annotation);
+    if (updated.bodies.length === 0) {
+      if (updated.isSelection)
+        props.onCancel();
+      else 
+        props.onAnnotationDeleted(props.annotation);
+    } else {
+      if (updated.isSelection)
+        props.onAnnotationCreated(updated.toAnnotation());
+      else
+        props.onAnnotationUpdated(updated, props.annotation);
+    }
   };
 
   return (

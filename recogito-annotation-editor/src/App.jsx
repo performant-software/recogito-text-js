@@ -75,6 +75,13 @@ export default class App extends Component {
     this.props[method](annotation, previous);
   }
 
+  onDeleteAnnotation = annotation => {
+    // TODO delete all relations that connect to it
+    this._clearState();
+    this.selectionHandler.clearSelection();
+    this.highlighter.removeAnnotation(annotation);
+  }
+
   /** Cancel button on annotation editor **/
   onCancelAnnotation = () => {
     this._clearState();
@@ -171,6 +178,7 @@ export default class App extends Component {
             annotation={this.state.selectedAnnotation}
             onAnnotationCreated={this.onCreateOrUpdateAnnotation('onAnnotationCreated')}
             onAnnotationUpdated={this.onCreateOrUpdateAnnotation('onAnnotationUpdated')}
+            onAnnotationDeleted={this.onDeleteAnnotation}
             onCancel={this.onCancelAnnotation} 
           />
         }
