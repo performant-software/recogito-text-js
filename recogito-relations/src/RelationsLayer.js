@@ -91,6 +91,15 @@ export default class RelationsLayer extends EventEmitter {
     }
   }
 
+  /**
+   * Get the relations that have the given annotation as start
+   * or end node.
+   */
+  getConnectionsFor = annotation => {
+    return this.connections.filter(c =>
+      c.startAnnotation.isEqual(annotation) || c.endAnnotation.isEqual(annotation));
+  }
+
   show = () =>
     this.svg.style.display = 'inital';
 

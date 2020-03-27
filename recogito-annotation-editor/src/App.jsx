@@ -76,7 +76,10 @@ export default class App extends Component {
   }
 
   onDeleteAnnotation = annotation => {
-    // TODO delete all relations that connect to it
+    // Delete connections
+    const connections = this.relationsLayer.getConnectionsFor(annotation);
+    connections.forEach(c => c.destroy());
+
     this._clearState();
     this.selectionHandler.clearSelection();
     this.highlighter.removeAnnotation(annotation);
