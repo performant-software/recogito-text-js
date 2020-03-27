@@ -136,6 +136,11 @@ export default class App extends Component {
     this.relationsLayer.init(annotations);
   }
 
+  getAnnotations = () => {
+    // TODO relationship annotations?
+    return this.highlighter.getAllAnnotations();
+  }
+
   setMode = mode => {
     if (mode === 'RELATIONS') {
       this.setState({ showEditor: false });

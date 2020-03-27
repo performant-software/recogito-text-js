@@ -94,6 +94,12 @@ class Recogito {
   });
 
   /**
+   * Returns all annotations
+   */
+  getAnnotations = () => 
+    this._app.current.getAnnotations();
+
+  /**
    * Activates annotation or relationship drawing mode. 
    * @param mode a string, either ANNOTATION (default) or RELATIONS
    */

@@ -39,6 +39,13 @@ export default class Highlighter {
       .filter(span => span.annotation.isEqual(annotation));
   }
 
+  getAllAnnotations = () => {
+    // TODO index annotation to make this faster
+    const allAnnotationSpans = document.querySelectorAll('.annotation');
+    return Array.prototype.slice.call(allAnnotationSpans)
+      .map(span => span.annotation);
+  }
+
   addOrUpdateAnnotation = (annotation, maybePrevious) => {
     // TODO index annotation to make this faster
     const annoSpans = this._findAnnotationSpans(annotation);
