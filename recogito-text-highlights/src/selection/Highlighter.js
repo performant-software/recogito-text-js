@@ -48,6 +48,7 @@ export default class Highlighter {
     if (spans.length > 0) {
       // naive approach
       this._unwrapHighlightings(spans);
+      this.el.normalize();
       this._addAnnotation(annotation);
     } else {
       this._addAnnotation(annotation);
