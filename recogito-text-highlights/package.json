@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "tiny-emitter": "^2.1.0",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "minimist": ">=1.2.2"
   }
 }
