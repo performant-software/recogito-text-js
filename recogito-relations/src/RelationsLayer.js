@@ -91,6 +91,10 @@ export default class RelationsLayer extends EventEmitter {
     }
   }
 
+  getAllRelations = () => {
+    return this.connections.map(c => c.annotation);
+  }
+
   /**
    * Get the relations that have the given annotation as start
    * or end node.

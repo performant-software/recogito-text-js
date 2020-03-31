@@ -31,6 +31,11 @@ export default class App extends Component {
     });
   }
 
+  handleEscape = (evt) => {
+    if (evt.which === 27)
+      this.onCancelAnnotation();
+  }
+
   componentDidMount() {
     this.highlighter = new Highlighter(this.props.contentEl, this.props.formatter);
 
@@ -43,6 +48,12 @@ export default class App extends Component {
     this.relationsLayer.on('createRelation', this.onEditRelation);
     this.relationsLayer.on('selectRelation', this.onEditRelation);
     this.relationsLayer.on('cancelDrawing', this.closeRelationsEditor);
+
+    document.addEventListener('keydown', this.handleEscape);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleEscape);
   }
 
   /**************************/  
@@ -147,8 +158,9 @@ export default class App extends Component {
   }
 
   getAnnotations = () => {
-    // TODO relationship annotations?
-    return this.highlighter.getAllAnnotations();
+    const annotations = this.highlighter.getAllAnnotations();
+    const relations = this.relationsLayer.getAllRelations();
+    return annotations.concat(relations);
   }
 
   setMode = mode => {
